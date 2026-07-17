@@ -392,6 +392,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "17.3.0"
+  go_router_uri:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "0ad6254d6ccddb22f10ffc37c95a23ba6165315a"
+      url: "https://github.com/oleggud512/go_router_uri.git"
+    source: git
+    version: "1.0.0"
   googleai_dart:
     dependency: "direct main"
     description:
@@ -521,7 +530,7 @@ packages:
     source: hosted
     version: "3.0.2"
   lean_builder:
-    dependency: "direct dev"
+    dependency: transitive
     description:
       name: lean_builder
       sha256: "123eef9fba96ec12a18b8eb4889850368d78e8c0a6a63eaa45ec4cf3e73fbded"
