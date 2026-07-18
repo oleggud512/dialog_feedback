@@ -16,9 +16,9 @@ class Success<S> extends Result<S> {
 }
 
 class Failure<S> extends Result<S> {
-  final AppFailure error;
-  Failure(this.error);
+  final AppFailure failure;
+  Failure(this.failure);
 
   @override
-  String toString() => "$runtimeType($error)";
+  String toString() => "$runtimeType($failure)";
 }

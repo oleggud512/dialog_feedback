@@ -43,7 +43,7 @@ void main() {
       final result = await repo.getTraining(666);
 
       result as Failure<Training>;
-      final appFailure = result.error;
+      final appFailure = result.failure;
       expect(appFailure, isA<NotFoundFailure>());
     },
   );
@@ -59,7 +59,7 @@ void main() {
 
       expect(result, isA<Failure>());
 
-      final failure = (result as Failure).error;
+      final failure = (result as Failure).failure;
       expect(failure, isA<DatabaseFailure>());
     },
   );

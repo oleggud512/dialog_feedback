@@ -25,7 +25,7 @@ class _SetupScreenContent extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final setupController = context.read<SetupController>();
+    final setupController = context.watch<SetupController>();
 
     final cont = useTextEditingController();
 
