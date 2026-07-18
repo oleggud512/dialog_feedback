@@ -14,6 +14,14 @@ class MyRouter {
         path: AppUri.root.setup.path,
         builder: (context, state) => SetupScreen(),
       ),
+      GoRoute(
+        path: AppUri.root.training.id().path,
+        builder: (context, state) {
+          final idStr = state.pathParameters[AppUri.root.training.id.paramName];
+          final id = int.parse(idStr ?? "");
+          return TrainingScreen(trainingId: id);
+        },
+      ),
     ],
   );
 }

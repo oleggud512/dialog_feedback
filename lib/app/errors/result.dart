@@ -1,6 +1,11 @@
 import 'package:dialog_feedback/app/app.dart';
 
-sealed class Result<S> {}
+sealed class Result<S> {
+  S? get valueOrNull => switch (this) {
+    Success(:final value) => value,
+    Failure() => null,
+  };
+}
 
 class Success<S> extends Result<S> {
   final S value;

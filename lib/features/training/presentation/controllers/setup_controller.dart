@@ -27,4 +27,11 @@ class SetupController extends SignalRegistry {
       training.value = createdTraining;
     });
   }
+
+  void reset() {
+    batch(() {
+      isLoading.value = false;
+      training.value = null;
+    });
+  }
 }

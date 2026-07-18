@@ -4,6 +4,7 @@ import 'package:dialog_feedback/di.dart';
 import 'package:dialog_feedback/features/features.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:signals/signals_hooks.dart';
 
@@ -32,7 +33,11 @@ class _SetupScreenContent extends HookWidget {
       if (setupController.isLoading.value == false &&
           setupController.training.value is Success &&
           setupController.training.previousValue is! Success) {
-        print("Open the training page");
+        final id = setupController.training.value!.valueOrNull!.id;
+        context.push(AppUri.root.training.id(id.toString()).path);
+
+        cont.clear();
+        setupController.reset();
       }
     }, keys: [setupController.isLoading, setupController.training]);
 
