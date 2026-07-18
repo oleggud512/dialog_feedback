@@ -1,6 +1,6 @@
 import 'package:dialog_feedback/app/app.dart';
 import 'package:dialog_feedback/core/core.dart';
-import 'package:dialog_feedback/features/features.dart';
+import 'package:dialog_feedback/shared/shared.dart';
 import 'package:injectable/injectable.dart';
 import 'package:signals/signals.dart';
 

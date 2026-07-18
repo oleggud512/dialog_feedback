@@ -1,5 +1,5 @@
 import 'package:dialog_feedback/app/app.dart';
-import 'package:dialog_feedback/features/features.dart';
+import 'package:dialog_feedback/shared/shared.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
