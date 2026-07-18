@@ -1,3 +1,3 @@
-export 'signal_container/signal_container.dart';
+export 'signal_registry/signal_registry.dart';
 export 'utils/utils.dart';
 export 'extensions/extensions.dart';
