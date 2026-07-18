@@ -63,4 +63,48 @@ void main() {
       expect(failure, isA<DatabaseFailure>());
     },
   );
+
+  test("getTrainings returns an empty list when there is no data", () async {
+    final result = await repo.getTrainings();
+
+    expect(result, isA<Success<List<Training>>>());
+
+    final list = (result as Success<List<Training>>).value;
+    expect(list, isEmpty);
+  });
+
+  test(
+    "getTrainings returns mapped records ordered descending by createdAt",
+    () async {
+      final now = DateTime.now();
+
+      await db
+          .into(db.trainingTable)
+          .insert(
+            TrainingTableCompanion.insert(
+              initialTaskText: "Old Task",
+              createdAt: Value(now.subtract(const Duration(days: 1))),
+            ),
+          );
+
+      await db
+          .into(db.trainingTable)
+          .insert(
+            TrainingTableCompanion.insert(
+              initialTaskText: "New Task",
+              createdAt: Value(now),
+            ),
+          );
+
+      final result = await repo.getTrainings();
+
+      expect(result, isA<Success<List<Training>>>());
+      final list = (result as Success<List<Training>>).value;
+
+      expect(list.length, 2);
+
+      expect(list[0].initialTaskText, "New Task");
+      expect(list[1].initialTaskText, "Old Task");
+    },
+  );
 }

@@ -1,6 +1,6 @@
 import 'package:dialog_feedback/app/app.dart';
-import 'package:dialog_feedback/core/core.dart';
 import 'package:dialog_feedback/features/features.dart';
+import 'package:drift/drift.dart';
 import 'package:injectable/injectable.dart';
 
 Training _toDomain(TrainingDbModel model) => Training(
@@ -11,14 +11,14 @@ Training _toDomain(TrainingDbModel model) => Training(
 );
 
 @Singleton(as: TrainingRepository)
-class TrainingRepositoryImpl implements TrainingRepository {
+class TrainingRepositoryImpl with DbErrorHandler implements TrainingRepository {
   final AppDatabase db;
 
   TrainingRepositoryImpl(this.db);
 
   @override
   Future<Result<Training>> createTraining(CreateTrainingParams params) async {
-    try {
+    return runDb(() async {
       final res = await db
           .into(db.trainingTable)
           .insert(
@@ -28,22 +28,33 @@ class TrainingRepositoryImpl implements TrainingRepository {
           );
 
       return getTraining(res);
-    } catch (e, st) {
-      glog.e(e, stackTrace: st);
-      return Failure(DatabaseFailure());
-    }
+    });
   }
 
   Future<Result<Training>> getTraining(int id) async {
-    final query = db.select(db.trainingTable)
-      ..where((tbl) => tbl.id.equals(id));
+    return runDb(() async {
+      final query = db.select(db.trainingTable)
+        ..where((tbl) => tbl.id.equals(id));
 
-    final res = await query.getSingleOrNull();
+      final res = await query.getSingleOrNull();
 
-    if (res == null) {
-      return Failure(NotFoundFailure());
-    }
+      if (res == null) {
+        return Failure(NotFoundFailure());
+      }
 
-    return Success(_toDomain(res));
+      return Success(_toDomain(res));
+    });
+  }
+
+  @override
+  Future<Result<List<Training>>> getTrainings() async {
+    return runDb(() async {
+      final query = db.select(db.trainingTable)
+        ..orderBy([(tbl) => OrderingTerm.desc(tbl.createdAt)]);
+
+      final res = await query.get();
+
+      return Success(res.map(_toDomain).toList());
+    });
   }
 }
