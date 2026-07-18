@@ -4,7 +4,7 @@ import 'package:dialog_feedback/di.dart';
 import 'package:dialog_feedback/features/features.dart';
 import 'package:dialog_feedback/shared/shared.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:signals/signals_flutter.dart';
 
@@ -82,16 +82,23 @@ class _TrainingListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: .all(0),
-      child: Padding(
-        padding: .all(16),
-        child: Column(
-          crossAxisAlignment: .stretch,
-          mainAxisSize: .min,
-          spacing: 8,
-          children: [
-            Text(training.initialTaskText),
-            Align(alignment: .centerEnd, child: Text(training.id.toString())),
-          ],
+      clipBehavior: .hardEdge,
+      child: InkWell(
+        onTap: () {
+          // TODO: Based on the training completion status, choose to open the Feedback screen
+          context.push(AppUri.root.training.id(training.id.toString()).path);
+        },
+        child: Padding(
+          padding: .all(16),
+          child: Column(
+            crossAxisAlignment: .stretch,
+            mainAxisSize: .min,
+            spacing: 8,
+            children: [
+              Text(training.initialTaskText),
+              Align(alignment: .centerEnd, child: Text(training.id.toString())),
+            ],
+          ),
         ),
       ),
     );
