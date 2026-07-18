@@ -1,6 +1,8 @@
+import 'package:dialog_feedback/app/app.dart';
 import 'package:dialog_feedback/core/core.dart';
 import 'package:dialog_feedback/features/features.dart';
 import 'package:injectable/injectable.dart';
+import 'package:signals/signals.dart';
 
 @injectable
 class SetupController extends SignalRegistry {
@@ -8,7 +10,21 @@ class SetupController extends SignalRegistry {
 
   SetupController(this._trainingRepository);
 
+  late final isLoading = track(trackedSignal(false));
+  late final training = track(trackedSignal<Result<Training>?>(null));
+
   Future<void> startTraining(String initialTaskText) async {
-    print(initialTaskText);
+    if (isLoading.value == true) return;
+
+    isLoading.value = true;
+
+    final createdTraining = await _trainingRepository.createTraining(
+      CreateTrainingParams(initialTaskText: initialTaskText),
+    );
+
+    batch(() {
+      isLoading.value = false;
+      training.value = createdTraining;
+    });
   }
 }

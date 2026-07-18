@@ -55,6 +55,7 @@ dependencies:
     git:
       url: https://github.com/oleggud512/go_router_uri.git
   logger: ^2.7.0
+  signals_hooks: ^7.1.0
 
 
 dev_dependencies:

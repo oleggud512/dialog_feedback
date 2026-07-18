@@ -1,9 +1,11 @@
+import 'package:dialog_feedback/app/app.dart';
 import 'package:dialog_feedback/core/core.dart';
 import 'package:dialog_feedback/di.dart';
 import 'package:dialog_feedback/features/features.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:provider/provider.dart';
+import 'package:signals/signals_hooks.dart';
 
 class SetupScreen extends StatelessWidget {
   const SetupScreen({super.key});
@@ -22,7 +24,17 @@ class _SetupScreenContent extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final setupController = context.read<SetupController>();
+
     final cont = useTextEditingController();
+
+    useSignalEffect(() {
+      if (setupController.isLoading.value == false &&
+          setupController.training.value is Success &&
+          setupController.training.previousValue is! Success) {
+        print("Open the training page");
+      }
+    }, keys: [setupController.isLoading, setupController.training]);
 
     return Scaffold(
       appBar: AppBar(title: Text("Setup Training".hc)),
@@ -48,13 +60,28 @@ class _SetupScreenContent extends HookWidget {
                         scrollPhysics: NeverScrollableScrollPhysics(),
                       ),
                     ),
-                    FilledButton(
-                      onPressed: () async {
-                        final res = await context
-                            .read<SetupController>()
-                            .startTraining(cont.text);
+                    FilledButton.icon(
+                      onPressed: () {
+                        context.read<SetupController>().startTraining(
+                          cont.text,
+                        );
                       },
-                      child: Text("Start Training".hc),
+                      label: Text("Start Training".hc),
+                      iconAlignment: .end,
+                      icon: SignalBuilder(
+                        builder: (context) {
+                          if (setupController.isLoading.value == false) {
+                            return Icon(Icons.arrow_forward);
+                          }
+                          return SizedBox.square(
+                            dimension: 18,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white.hc,
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ],
                 ),
