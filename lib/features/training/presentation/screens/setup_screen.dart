@@ -42,7 +42,18 @@ class _SetupScreenContent extends HookWidget {
     }, keys: [setupController.isLoading, setupController.training]);
 
     return Scaffold(
-      appBar: AppBar(title: Text("Setup Training".hc)),
+      appBar: AppBar(
+        title: Text("Setup Training".hc),
+        actions: [
+          TextButton.icon(
+            onPressed: () {
+              context.push(AppUri.root.history.path);
+            },
+            label: Text("History".hc),
+            icon: Icon(Icons.history_edu_rounded),
+          ),
+        ],
+      ),
       body: CustomScrollView(
         slivers: [
           SliverFillRemaining(

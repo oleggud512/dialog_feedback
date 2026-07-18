@@ -10,6 +10,8 @@ class AppUri extends RootSubPath {
 
   late final setup = leafRoute('setup');
 
+  late final history = leafRoute('history');
+
   late final training = route<TrainingSubPath>('training');
 }
 

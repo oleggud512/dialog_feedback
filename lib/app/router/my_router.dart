@@ -15,6 +15,10 @@ class MyRouter {
         builder: (context, state) => SetupScreen(),
       ),
       GoRoute(
+        path: AppUri.root.history.path,
+        builder: (context, state) => HistoryScreen(),
+      ),
+      GoRoute(
         path: AppUri.root.training.id().path,
         builder: (context, state) {
           final idStr = state.pathParameters[AppUri.root.training.id.paramName];
