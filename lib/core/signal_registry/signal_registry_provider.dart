@@ -1,7 +1,7 @@
-part of 'signal_container.dart';
+part of 'signal_registry.dart';
 
-class SignalContainerProvider<T extends SignalContainer> extends Provider<T> {
-  SignalContainerProvider({
+class SignalRegistryProvider<T extends SignalRegistry> extends Provider<T> {
+  SignalRegistryProvider({
     super.key,
     required super.create,
     super.child,

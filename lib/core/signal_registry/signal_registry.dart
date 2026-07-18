@@ -2,9 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:signals/signals.dart';
 
-part 'signal_container_provider.dart';
+part 'signal_registry_provider.dart';
 
-abstract class SignalContainer {
+abstract class SignalRegistry {
   final List<void Function()> _cleanups = [];
 
   T track<T extends ReadonlySignal>(T signalInstance) {
