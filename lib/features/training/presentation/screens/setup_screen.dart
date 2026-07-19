@@ -44,6 +44,13 @@ class _SetupScreenContent extends HookWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Setup Training".hc),
+        leading: IconButton(
+          onPressed: () {
+            context.push(AppUri.root.settings.path);
+          },
+          color: Theme.of(context).primaryColor.hc,
+          icon: Icon(Icons.settings),
+        ),
         actions: [
           TextButton.icon(
             onPressed: () {
