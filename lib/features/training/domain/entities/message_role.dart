@@ -1,0 +1,1 @@
+enum MessageRole { ai, user }

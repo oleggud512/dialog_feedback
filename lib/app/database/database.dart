@@ -22,7 +22,7 @@ class TrainingTable extends Table {
   late final createdAt = dateTime().withDefault(currentDateAndTime)();
 }
 
-enum MessageRole { ai, user }
+enum MessageTableMessageRole { ai, user }
 
 @DataClassName("MessageDbModel")
 class MessageTable extends Table {
@@ -31,7 +31,7 @@ class MessageTable extends Table {
 
   late final id = integer().autoIncrement()();
   late final messageText = text()();
-  late final role = textEnum<MessageRole>()();
+  late final role = textEnum<MessageTableMessageRole>()();
   late final createdAt = dateTime().withDefault(currentDateAndTime)();
   late final trainingId = integer().references(TrainingTable, #id)();
 }

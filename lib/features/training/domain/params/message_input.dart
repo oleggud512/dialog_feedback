@@ -1,0 +1,18 @@
+import 'package:dialog_feedback/features/features.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'message_input.freezed.dart';
+part 'message_input.g.dart';
+
+@freezed
+sealed class MessageInput with _$MessageInput {
+  const factory MessageInput({
+    required String messageText,
+    required MessageRole role,
+  }) = _MessageInput;
+
+  const MessageInput._();
+
+  factory MessageInput.fromJson(Map<String, dynamic> json) =>
+      _$MessageInputFromJson(json);
+}
