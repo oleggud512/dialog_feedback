@@ -5,9 +5,17 @@ import 'package:signals/signals_flutter.dart';
 class KeyValueSignal<T> extends FlutterSignal<T> {
   final KeyValueEntity<T> entity;
   StreamSubscription<T>? _subscription;
+  T? _lastWrittenValue;
 
   KeyValueSignal(this.entity) : super(entity.get()) {
     _subscription = entity.watch().listen((newValue) {
+      if (_lastWrittenValue != null) {
+        if (newValue == _lastWrittenValue) {
+          _lastWrittenValue = null;
+        }
+        return;
+      }
+
       if (super.value != newValue) {
         super.value = newValue;
       }
@@ -22,6 +30,7 @@ class KeyValueSignal<T> extends FlutterSignal<T> {
   set value(T newValue) {
     if (super.value == newValue) return;
     super.value = newValue;
+    _lastWrittenValue = newValue;
     entity.set(newValue);
   }
 }
