@@ -11,7 +11,6 @@ class SettingsController extends SignalRegistry {
   late final apiKey = track(_store.apiKey.toSignal());
 
   void setApiKey(String newApiKey) {
-    final sanitized = newApiKey.trim();
-    apiKey.value = sanitized;
+    apiKey.value = newApiKey;
   }
 }
