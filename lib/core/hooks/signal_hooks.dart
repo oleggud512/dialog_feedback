@@ -11,7 +11,15 @@ TextEditingController useSignalTextEditingController(
     final unbind = effect(() {
       final val = signal.value;
       if (controller.text != val) {
-        controller.text = val;
+        final selection = controller.selection;
+
+        controller.value = TextEditingValue(
+          text: val,
+          selection: TextSelection(
+            baseOffset: selection.baseOffset.clamp(0, val.length),
+            extentOffset: selection.extentOffset.clamp(0, val.length),
+          ),
+        );
       }
     });
     return unbind;
