@@ -13,6 +13,11 @@ abstract class RegisterModule {
   @Singleton(dispose: disposeAppDatabase)
   AppDatabase appDatabase() => AppDatabase();
 
+  @preResolve
   @Singleton(dispose: disposeSecureKeyValueStore)
-  SecureKeyValueStore secureKeyValueStore() => SecureKeyValueStore();
+  Future<SecureKeyValueStore> secureKeyValueStore() async {
+    final storage = SecureKeyValueStore();
+    await storage.init();
+    return storage;
+  }
 }

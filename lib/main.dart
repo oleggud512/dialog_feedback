@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  configureDependencies();
+  await configureDependencies();
 
   final db = sl<AppDatabase>();
   await db.customStatement("DELETE FROM training");
