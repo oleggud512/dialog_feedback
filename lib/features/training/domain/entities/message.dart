@@ -9,7 +9,18 @@ sealed class Message with _$Message {
     required int id,
     required String messageText,
     required MessageRole role,
+    required DateTime createdAt,
   }) = _Message;
 
   const Message._();
+}
+
+@freezed
+sealed class CreateMessageParams with _$CreateMessageParams {
+  const factory CreateMessageParams({
+    required String messageText,
+    required MessageRole role,
+  }) = _CreateMessageParams;
+
+  const CreateMessageParams._();
 }
