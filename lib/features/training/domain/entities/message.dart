@@ -10,6 +10,7 @@ sealed class Message with _$Message {
     required String messageText,
     required MessageRole role,
     required DateTime createdAt,
+    required int trainingId,
   }) = _Message;
 
   const Message._();
@@ -20,6 +21,7 @@ sealed class CreateMessageParams with _$CreateMessageParams {
   const factory CreateMessageParams({
     required String messageText,
     required MessageRole role,
+    required int trainingId,
   }) = _CreateMessageParams;
 
   const CreateMessageParams._();
