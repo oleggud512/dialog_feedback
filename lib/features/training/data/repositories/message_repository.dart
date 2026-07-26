@@ -2,31 +2,13 @@ import 'package:dialog_feedback/app/database/database.dart';
 import 'package:dialog_feedback/app/errors/action_executor.dart';
 import 'package:dialog_feedback/app/errors/app_failure.dart';
 import 'package:dialog_feedback/app/errors/result.dart';
-import 'package:dialog_feedback/shared/domain/entities/training.dart';
+import 'package:dialog_feedback/shared/data/mappers/training_mapper.dart';
+import '../mappers/message_mapper.dart';
 import '../../domain/entities/message.dart';
-import '../../domain/entities/message_role.dart';
 import '../../domain/entities/messages_aggregate.dart';
 import '../../domain/repositories/message_repository.dart';
 import 'package:drift/drift.dart';
 import 'package:injectable/injectable.dart';
-
-Training _toDomain(TrainingDbModel model) => Training(
-  id: model.id,
-  initialTaskText: model.initialTaskText,
-  isChatCompleted: model.isChatCompleted,
-  createdAt: model.createdAt,
-);
-
-Message _messageToDomain(MessageDbModel model) => Message(
-  id: model.id,
-  messageText: model.messageText,
-  role: switch (model.role) {
-    .ai => MessageRole.ai,
-    .user => MessageRole.user,
-  },
-  createdAt: model.createdAt,
-  trainingId: model.trainingId,
-);
 
 @Singleton(as: MessageRepository)
 class MessageRepositoryImpl with ActionExecutor implements MessageRepository {
@@ -45,7 +27,7 @@ class MessageRepositoryImpl with ActionExecutor implements MessageRepository {
         return Failure(NotFoundFailure());
       }
 
-      return Success(_messageToDomain(res));
+      return Success(res.toDomain());
     }, createDefault: (_) => Failure(DatabaseFailure()));
   }
 
@@ -57,10 +39,7 @@ class MessageRepositoryImpl with ActionExecutor implements MessageRepository {
           .insert(
             MessageTableCompanion.insert(
               messageText: params.messageText,
-              role: switch (params.role) {
-                .ai => MessageTableMessageRole.ai,
-                .user => MessageTableMessageRole.user,
-              },
+              role: params.role.toData(),
               trainingId: params.trainingId,
             ),
           );
@@ -85,14 +64,10 @@ class MessageRepositoryImpl with ActionExecutor implements MessageRepository {
       }
 
       final trainingDbModel = rows.first.readTable(db.trainingTable);
-      final training = _toDomain(trainingDbModel);
+      final training = trainingDbModel.toDomain();
 
       final messages = rows
-          .map((row) {
-            final messageDbModel = row.readTableOrNull(db.messageTable);
-            if (messageDbModel == null) return null;
-            return _messageToDomain(messageDbModel);
-          })
+          .map((row) => row.readTableOrNull(db.messageTable)?.toDomain())
           .whereType<Message>()
           .toList();
 

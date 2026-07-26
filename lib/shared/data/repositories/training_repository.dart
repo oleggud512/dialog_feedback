@@ -2,17 +2,11 @@ import 'package:dialog_feedback/app/database/database.dart';
 import 'package:dialog_feedback/app/errors/action_executor.dart';
 import 'package:dialog_feedback/app/errors/app_failure.dart';
 import 'package:dialog_feedback/app/errors/result.dart';
+import 'package:dialog_feedback/shared/data/mappers/training_mapper.dart';
 import 'package:dialog_feedback/shared/domain/entities/training.dart';
 import 'package:dialog_feedback/shared/domain/repositories/training_repository.dart';
 import 'package:drift/drift.dart';
 import 'package:injectable/injectable.dart';
-
-Training _toDomain(TrainingDbModel model) => Training(
-  id: model.id,
-  initialTaskText: model.initialTaskText,
-  isChatCompleted: model.isChatCompleted,
-  createdAt: model.createdAt,
-);
 
 @Singleton(as: TrainingRepository)
 class TrainingRepositoryImpl with ActionExecutor implements TrainingRepository {
@@ -46,7 +40,7 @@ class TrainingRepositoryImpl with ActionExecutor implements TrainingRepository {
         return Failure(NotFoundFailure());
       }
 
-      return Success(_toDomain(res));
+      return Success(res.toDomain());
     }, createDefault: (_) => Failure(DatabaseFailure()));
   }
 
@@ -58,7 +52,7 @@ class TrainingRepositoryImpl with ActionExecutor implements TrainingRepository {
 
       final res = await query.get();
 
-      return Success(res.map(_toDomain).toList());
+      return Success(res.map((model) => model.toDomain()).toList());
     }, createDefault: (_) => Failure(DatabaseFailure()));
   }
 }
