@@ -1,6 +1,9 @@
-import 'package:dialog_feedback/app/app.dart';
-import 'package:dialog_feedback/features/features.dart';
+import 'package:dialog_feedback/features/history/presentation/screens/history_screen.dart';
+import 'package:dialog_feedback/features/settings/presentation/screens/settings_screen.dart';
+import 'package:dialog_feedback/features/training/presentation/screens/setup_screen.dart';
+import 'package:dialog_feedback/features/training/presentation/screens/training_screen.dart';
 import 'package:go_router/go_router.dart';
+import 'app_uri.dart';
 
 class MyRouter {
   const MyRouter._();

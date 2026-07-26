@@ -1,5 +1,5 @@
-import 'package:dialog_feedback/features/features.dart';
-import 'package:dialog_feedback/shared/shared.dart';
+import 'package:dialog_feedback/shared/domain/entities/training.dart';
+import 'message.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'messages_aggregate.freezed.dart';

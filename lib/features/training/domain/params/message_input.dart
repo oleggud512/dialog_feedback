@@ -1,4 +1,4 @@
-import 'package:dialog_feedback/features/features.dart';
+import '../entities/message_role.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'message_input.freezed.dart';

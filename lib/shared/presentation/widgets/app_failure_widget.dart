@@ -1,7 +1,7 @@
-import 'package:dialog_feedback/app/app.dart';
-import 'package:dialog_feedback/core/core.dart';
-import 'package:dialog_feedback/shared/shared.dart';
+import 'package:dialog_feedback/app/errors/app_failure.dart';
+import 'package:dialog_feedback/core/extensions/dev.dart';
 import 'package:flutter/material.dart';
+import '../extensions/app_failure.dart';
 
 class AppFailureWidget extends StatelessWidget {
   const AppFailureWidget({super.key, required this.failure});

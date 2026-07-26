@@ -1,5 +1,6 @@
-import 'package:dialog_feedback/app/app.dart';
-import 'package:dialog_feedback/features/features.dart';
+import 'package:dialog_feedback/app/errors/result.dart';
+import '../entities/message.dart';
+import '../entities/messages_aggregate.dart';
 
 abstract interface class MessageRepository {
   Future<Result<MessagesAggregate>> getMessages(int trainingId);

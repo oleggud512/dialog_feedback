@@ -1,8 +1,12 @@
-import 'package:dialog_feedback/app/app.dart';
-import 'package:dialog_feedback/core/core.dart';
+import 'package:dialog_feedback/app/errors/app_failure.dart';
+import 'package:dialog_feedback/app/errors/result.dart';
+import 'package:dialog_feedback/app/router/app_uri.dart';
+import 'package:dialog_feedback/core/extensions/dev.dart';
+import 'package:dialog_feedback/core/signal_registry/signal_registry.dart';
 import 'package:dialog_feedback/di.dart';
-import 'package:dialog_feedback/features/features.dart';
-import 'package:dialog_feedback/shared/shared.dart';
+import 'package:dialog_feedback/shared/domain/entities/training.dart';
+import 'package:dialog_feedback/shared/presentation/widgets/app_failure_widget.dart';
+import '../controllers/history_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';

@@ -1,4 +1,4 @@
-import 'package:dialog_feedback/features/features.dart';
+import 'message_input.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'get_feedback.freezed.dart';

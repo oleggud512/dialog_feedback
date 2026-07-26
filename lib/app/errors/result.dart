@@ -1,4 +1,4 @@
-import 'package:dialog_feedback/app/app.dart';
+import 'app_failure.dart';
 
 sealed class Result<S> {
   S? get valueOrNull => switch (this) {

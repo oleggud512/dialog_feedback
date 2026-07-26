@@ -1,4 +1,4 @@
-import 'package:dialog_feedback/features/features.dart';
+import '../../domain/params/message_input.dart';
 
 String getAiMessageSystemPrompt() =>
     '''You are an AI language tutor and conversation partner helping a student practice "Teil 3: Zusammen etwas planen" of the German DTZ (Deutsch-Test für Zuwanderer) B1 speaking exam.

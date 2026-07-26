@@ -1,5 +1,5 @@
-import 'package:dialog_feedback/app/app.dart';
-import 'package:dialog_feedback/shared/shared.dart';
+import 'package:dialog_feedback/app/errors/result.dart';
+import '../entities/training.dart';
 
 abstract interface class TrainingRepository {
   Future<Result<Training>> createTraining(CreateTrainingParams params);

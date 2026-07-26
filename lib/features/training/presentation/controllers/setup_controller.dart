@@ -1,6 +1,7 @@
-import 'package:dialog_feedback/app/app.dart';
-import 'package:dialog_feedback/core/core.dart';
-import 'package:dialog_feedback/shared/shared.dart';
+import 'package:dialog_feedback/app/errors/result.dart';
+import 'package:dialog_feedback/core/signal_registry/signal_registry.dart';
+import 'package:dialog_feedback/shared/domain/entities/training.dart';
+import 'package:dialog_feedback/shared/domain/repositories/training_repository.dart';
 import 'package:injectable/injectable.dart';
 import 'package:signals/signals.dart';
 

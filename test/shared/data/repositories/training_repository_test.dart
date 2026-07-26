@@ -1,5 +1,8 @@
-import 'package:dialog_feedback/app/app.dart';
-import 'package:dialog_feedback/shared/shared.dart';
+import 'package:dialog_feedback/app/database/database.dart';
+import 'package:dialog_feedback/app/errors/app_failure.dart';
+import 'package:dialog_feedback/app/errors/result.dart';
+import 'package:dialog_feedback/shared/data/repositories/training_repository.dart';
+import 'package:dialog_feedback/shared/domain/entities/training.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';

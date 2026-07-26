@@ -1,6 +1,12 @@
-import 'package:dialog_feedback/app/app.dart';
-import 'package:dialog_feedback/features/features.dart';
-import 'package:dialog_feedback/shared/shared.dart';
+import 'package:dialog_feedback/app/database/database.dart';
+import 'package:dialog_feedback/app/errors/action_executor.dart';
+import 'package:dialog_feedback/app/errors/app_failure.dart';
+import 'package:dialog_feedback/app/errors/result.dart';
+import 'package:dialog_feedback/shared/domain/entities/training.dart';
+import '../../domain/entities/message.dart';
+import '../../domain/entities/message_role.dart';
+import '../../domain/entities/messages_aggregate.dart';
+import '../../domain/repositories/message_repository.dart';
 import 'package:drift/drift.dart';
 import 'package:injectable/injectable.dart';
 

@@ -1,4 +1,4 @@
-import 'package:dialog_feedback/app/app.dart';
+import 'package:dialog_feedback/app/errors/app_failure.dart';
 
 extension AppFailureLocalization on AppFailure {
   // TODO: implement localization

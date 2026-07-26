@@ -1,4 +1,4 @@
-import 'package:dialog_feedback/core/core.dart';
+import 'package:dialog_feedback/core/extensions/dev.dart';
 import 'package:flutter/material.dart';
 
 class TrainingScreen extends StatelessWidget {
