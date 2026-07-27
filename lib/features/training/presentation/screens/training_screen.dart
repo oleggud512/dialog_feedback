@@ -116,7 +116,7 @@ class _TrainingScreenContent extends HookWidget {
           SignalBuilder(
             builder: (context) {
               final isMessageLoading =
-                  trainingController.loadingMessage.value != null;
+                  trainingController.isMessageLoading.value;
               final messageError = trainingController.loadingMessageError.value;
 
               return Column(
@@ -165,7 +165,7 @@ class _TrainingScreenContent extends HookWidget {
                   );
                 }
 
-                final isLoading =
+                final isMessageInProgress =
                     trainingController.loadingMessage.value != null;
 
                 return Row(
@@ -174,19 +174,19 @@ class _TrainingScreenContent extends HookWidget {
                     Expanded(
                       child: TextField(
                         controller: inputCont,
-                        onSubmitted: isLoading
+                        onSubmitted: isMessageInProgress
                             ? null
                             : (_) {
                                 addMessage();
                               },
-                        enabled: !isLoading,
+                        enabled: !isMessageInProgress,
                         decoration: InputDecoration(
                           hintText: "Enter a message...".hc,
                         ),
                       ),
                     ),
                     IconButton(
-                      onPressed: isLoading
+                      onPressed: isMessageInProgress
                           ? null
                           : () {
                               addMessage();

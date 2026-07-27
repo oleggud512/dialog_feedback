@@ -23,12 +23,19 @@ class TrainingController extends SignalRegistry {
 
   late final loadingMessage = track(trackedSignal<Message?>(null));
   late final loadingMessageError = track(trackedSignal<AppFailure?>(null));
+  late final isMessageLoading = track(computed(_computeIsMessageLoading));
 
   late final training = track(
     computed<Training?>(() => _aggregate.value?.training),
   );
 
   late final messages = track(computed(_computeMessages));
+
+  bool _computeIsMessageLoading() {
+    final isMessage = loadingMessage.value != null;
+    final isError = loadingMessageError.value != null;
+    return isMessage && !isError;
+  }
 
   List<Message> _computeMessages() {
     final currentAggr = _aggregate.value;
