@@ -28,7 +28,7 @@ class TrainingInteractor {
 
     final newUserMessageRes = await _messageRepo.createMessage(
       CreateMessageParams(
-        messageText: params.message,
+        messageText: params.messageText,
         role: MessageRole.user,
         trainingId: params.trainingId,
       ),

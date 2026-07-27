@@ -6,7 +6,7 @@ part 'add_message.freezed.dart';
 sealed class AddMessageParams with _$AddMessageParams {
   const factory AddMessageParams({
     required int trainingId,
-    required String message,
+    required String messageText,
   }) = _AddMessageParams;
 
   const AddMessageParams._();
