@@ -8,6 +8,7 @@ sealed class AnswerPair with _$AnswerPair {
   const factory AnswerPair({
     required Message question,
     required Message answer,
+    required bool isCompleted,
   }) = _AnswerPair;
 
   const AnswerPair._();

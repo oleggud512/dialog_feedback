@@ -17,15 +17,15 @@ class TrainingRepositoryImpl with ActionExecutor implements TrainingRepository {
   @override
   Future<Result<Training>> createTraining(CreateTrainingParams params) async {
     return execute(() async {
-      final res = await db
+      final row = await db
           .into(db.trainingTable)
-          .insert(
+          .insertReturning(
             TrainingTableCompanion.insert(
               initialTaskText: params.initialTaskText,
             ),
           );
 
-      return getTraining(res);
+      return Success(row.toDomain());
     }, createDefault: (_) => Failure(DatabaseFailure()));
   }
 

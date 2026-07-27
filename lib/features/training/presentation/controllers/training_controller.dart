@@ -21,8 +21,8 @@ class TrainingController extends SignalRegistry {
   late final loading = track(signal<bool>(false));
   late final error = track(signal<AppFailure?>(null));
 
-  late final loadingMessage = track(signal<Message?>(null));
-  late final loadingMessageError = track(signal<AppFailure?>(null));
+  late final loadingMessage = track(trackedSignal<Message?>(null));
+  late final loadingMessageError = track(trackedSignal<AppFailure?>(null));
 
   late final training = track(
     computed<Training?>(() => _aggregate.value?.training),
@@ -92,6 +92,11 @@ class TrainingController extends SignalRegistry {
       case Success(value: final answerPair):
         batch(() {
           _aggregate.value = currentAggr.copyWith(
+            training: currentAggr.training.copyWith(
+              isChatCompleted:
+                  currentAggr.training.isChatCompleted ||
+                  answerPair.isCompleted,
+            ),
             messages: [
               ...currentAggr.messages,
               answerPair.question,
@@ -105,5 +110,12 @@ class TrainingController extends SignalRegistry {
         loadingMessageError.value = failure;
         break;
     }
+  }
+
+  void resetError() {
+    batch(() {
+      loadingMessage.value = null;
+      loadingMessageError.value = null;
+    });
   }
 }

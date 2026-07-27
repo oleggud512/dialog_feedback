@@ -26,26 +26,15 @@ class TrainingInteractor {
 
     final messages = messagesRes.valueOrNull!;
 
-    final newUserMessageRes = await _messageRepo.createMessage(
-      CreateMessageParams(
-        messageText: params.messageText,
-        role: MessageRole.user,
-        trainingId: params.trainingId,
-      ),
-    );
-
-    if (newUserMessageRes case Failure(:final failure)) {
-      return Failure(failure);
-    }
-
-    final newUserMessage = newUserMessageRes.valueOrNull!;
-
     final generatedMessageRes = await _promptsRepo.getAiMessage(
       GetAiMessageParams(
         initialTaskText: messages.training.initialTaskText,
-        messages: [...messages.messages, newUserMessage]
-            .map((m) => MessageInput(messageText: m.messageText, role: m.role))
-            .toList(),
+        messages: [
+          ...messages.messages.map(
+            (m) => MessageInput(messageText: m.messageText, role: m.role),
+          ),
+          MessageInput(messageText: params.messageText, role: MessageRole.user),
+        ],
       ),
     );
 
@@ -55,22 +44,18 @@ class TrainingInteractor {
 
     final generatedMessage = generatedMessageRes.valueOrNull!;
 
-    final newGeneratedMessageRes = await _messageRepo.createMessage(
-      CreateMessageParams(
+    return _messageRepo.createAnswerPair(
+      userParams: CreateMessageParams(
+        messageText: params.messageText,
+        role: MessageRole.user,
+        trainingId: params.trainingId,
+      ),
+      aiParams: CreateMessageParams(
         messageText: generatedMessage.messageText,
         role: MessageRole.ai,
         trainingId: params.trainingId,
       ),
-    );
-
-    if (newGeneratedMessageRes case Failure(:final failure)) {
-      return Failure(failure);
-    }
-
-    final newGeneratedMessage = newGeneratedMessageRes.valueOrNull!;
-
-    return Success(
-      AnswerPair(question: newUserMessage, answer: newGeneratedMessage),
+      isCompleted: generatedMessage.isCompleted,
     );
   }
 

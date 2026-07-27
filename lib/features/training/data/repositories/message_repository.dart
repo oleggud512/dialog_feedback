@@ -2,6 +2,7 @@ import 'package:dialog_feedback/app/database/database.dart';
 import 'package:dialog_feedback/app/errors/action_executor.dart';
 import 'package:dialog_feedback/app/errors/app_failure.dart';
 import 'package:dialog_feedback/app/errors/result.dart';
+import 'package:dialog_feedback/features/training/domain/entities/answer_pair.dart';
 import 'package:dialog_feedback/shared/data/mappers/training_mapper.dart';
 import '../mappers/message_mapper.dart';
 import '../../domain/entities/message.dart';
@@ -34,16 +35,16 @@ class MessageRepositoryImpl with ActionExecutor implements MessageRepository {
   @override
   Future<Result<Message>> createMessage(CreateMessageParams params) {
     return execute(() async {
-      final res = await db
+      final row = await db
           .into(db.messageTable)
-          .insert(
+          .insertReturning(
             MessageTableCompanion.insert(
               messageText: params.messageText,
               role: params.role.toData(),
               trainingId: params.trainingId,
             ),
           );
-      return getMessage(res);
+      return Success(row.toDomain());
     }, createDefault: (_) => Failure(DatabaseFailure()));
   }
 
@@ -72,6 +73,53 @@ class MessageRepositoryImpl with ActionExecutor implements MessageRepository {
           .toList();
 
       return Success(MessagesAggregate(training: training, messages: messages));
+    }, createDefault: (_) => Failure(DatabaseFailure()));
+  }
+
+  @override
+  Future<Result<AnswerPair>> createAnswerPair({
+    required CreateMessageParams userParams,
+    required CreateMessageParams aiParams,
+    required bool isCompleted,
+  }) {
+    return execute(() async {
+      return db.transaction(() async {
+        final userRow = await db
+            .into(db.messageTable)
+            .insertReturning(
+              MessageTableCompanion.insert(
+                messageText: userParams.messageText,
+                role: userParams.role.toData(),
+                trainingId: userParams.trainingId,
+              ),
+            );
+
+        final aiRow = await db
+            .into(db.messageTable)
+            .insertReturning(
+              MessageTableCompanion.insert(
+                messageText: aiParams.messageText,
+                role: aiParams.role.toData(),
+                trainingId: aiParams.trainingId,
+              ),
+            );
+
+        if (isCompleted) {
+          await (db.update(
+            db.trainingTable,
+          )..where((tbl) => tbl.id.equals(userParams.trainingId))).write(
+            const TrainingTableCompanion(isChatCompleted: Value(true)),
+          );
+        }
+
+        return Success(
+          AnswerPair(
+            question: userRow.toDomain(),
+            answer: aiRow.toDomain(),
+            isCompleted: isCompleted,
+          ),
+        );
+      });
     }, createDefault: (_) => Failure(DatabaseFailure()));
   }
 }
