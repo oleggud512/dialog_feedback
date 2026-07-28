@@ -601,7 +601,7 @@ class Feedback extends Table with TableInfo<Feedback, FeedbackData> {
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
-    $customConstraints: 'NOT NULL REFERENCES training(id)',
+    $customConstraints: 'NOT NULL UNIQUE REFERENCES training(id)',
   );
   @override
   List<GeneratedColumn> get $columns => [

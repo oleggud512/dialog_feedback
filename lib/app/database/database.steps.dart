@@ -157,7 +157,7 @@ final class Schema3 extends i0.VersionedSchema {
       withoutRowId: false,
       isStrict: false,
       tableConstraints: [],
-      columns: [_column_0, _column_7, _column_3, _column_6],
+      columns: [_column_0, _column_7, _column_3, _column_8],
       attachedDatabase: database,
     ),
     alias: null,
@@ -183,6 +183,14 @@ i1.GeneratedColumn<String> _column_7(String aliasedName) =>
       false,
       type: i1.DriftSqlType.string,
       $customConstraints: 'NOT NULL',
+    );
+i1.GeneratedColumn<int> _column_8(String aliasedName) =>
+    i1.GeneratedColumn<int>(
+      'training_id',
+      aliasedName,
+      false,
+      type: i1.DriftSqlType.int,
+      $customConstraints: 'NOT NULL UNIQUE REFERENCES training(id)',
     );
 i0.MigrationStepWithVersion migrationSteps({
   required Future<void> Function(i1.Migrator m, Schema2 schema) from1To2,

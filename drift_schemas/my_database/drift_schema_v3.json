@@ -215,13 +215,14 @@
             "moor_type": "int",
             "nullable": false,
             "customConstraints": null,
-            "defaultConstraints": "REFERENCES training (id)",
+            "defaultConstraints": "UNIQUE REFERENCES training (id)",
             "dialectAwareDefaultConstraints": {
-              "sqlite": "REFERENCES training (id)"
+              "sqlite": "UNIQUE REFERENCES training (id)"
             },
             "default_dart": null,
             "default_client_dart": null,
             "dsl_features": [
+              "unique",
               {
                 "foreign_key": {
                   "to": {
@@ -266,7 +267,7 @@
       "sql": [
         {
           "dialect": "sqlite",
-          "sql": "CREATE TABLE IF NOT EXISTS \"feedback\" (\"id\" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \"feedback_text\" TEXT NOT NULL, \"created_at\" TEXT NOT NULL DEFAULT (CURRENT_TIMESTAMP), \"training_id\" INTEGER NOT NULL REFERENCES training (id));"
+          "sql": "CREATE TABLE IF NOT EXISTS \"feedback\" (\"id\" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \"feedback_text\" TEXT NOT NULL, \"created_at\" TEXT NOT NULL DEFAULT (CURRENT_TIMESTAMP), \"training_id\" INTEGER NOT NULL UNIQUE REFERENCES training (id));"
         }
       ]
     }

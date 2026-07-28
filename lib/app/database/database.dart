@@ -44,7 +44,7 @@ class FeedbackTable extends Table {
   late final id = integer().autoIncrement()();
   late final feedbackText = text()();
   late final createdAt = dateTime().withDefault(currentDateAndTime)();
-  late final trainingId = integer().references(TrainingTable, #id)();
+  late final trainingId = integer().references(TrainingTable, #id).unique()();
 }
 
 @DriftDatabase(tables: [TrainingTable, MessageTable, FeedbackTable])
