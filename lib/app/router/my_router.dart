@@ -1,5 +1,6 @@
 import 'package:dialog_feedback/features/history/presentation/screens/history_screen.dart';
 import 'package:dialog_feedback/features/settings/presentation/screens/settings_screen.dart';
+import 'package:dialog_feedback/features/training/presentation/screens/feedback_screen.dart';
 import 'package:dialog_feedback/features/training/presentation/screens/setup_screen.dart';
 import 'package:dialog_feedback/features/training/presentation/screens/training_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -31,6 +32,14 @@ class MyRouter {
           final idStr = state.pathParameters[AppUri.root.training.id.paramName];
           final id = int.parse(idStr ?? "");
           return TrainingScreen(trainingId: id);
+        },
+      ),
+      GoRoute(
+        path: AppUri.root.feedback.id().path,
+        builder: (context, state) {
+          final idStr = state.pathParameters[AppUri.root.feedback.id.paramName];
+          final id = int.parse(idStr ?? "");
+          return FeedbackScreen(trainingId: id);
         },
       ),
     ],

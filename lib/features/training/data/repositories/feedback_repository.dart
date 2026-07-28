@@ -7,7 +7,7 @@ import 'package:dialog_feedback/features/training/domain/entities/training_feedb
 import 'package:dialog_feedback/features/training/domain/repositories/feedback_repository.dart';
 import 'package:injectable/injectable.dart';
 
-@injectable
+@Singleton(as: FeedbackRepository)
 class FeedbackRepositoryImpl with ActionExecutor implements FeedbackRepository {
   final AppDatabase db;
 

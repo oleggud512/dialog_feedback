@@ -1,4 +1,5 @@
 import 'package:dialog_feedback/app/errors/app_failure.dart';
+import 'package:dialog_feedback/app/router/app_uri.dart';
 import 'package:dialog_feedback/core/extensions/dev.dart';
 import 'package:dialog_feedback/core/extensions/list.dart';
 import 'package:dialog_feedback/core/signal_registry/signal_registry.dart';
@@ -9,6 +10,7 @@ import 'package:dialog_feedback/shared/presentation/extensions/app_failure.dart'
 import 'package:dialog_feedback/shared/presentation/widgets/app_failure_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:signals/signals_hooks.dart';
 
@@ -159,7 +161,9 @@ class _TrainingScreenContent extends HookWidget {
                 if (isCompleted) {
                   return FilledButton(
                     onPressed: () {
-                      // TODO: To the feedback screen!!!
+                      final id = trainingController.training.value?.id;
+                      if (id == null) return;
+                      context.push(AppUri.root.feedback.id(id.toString()).path);
                     },
                     child: Text("Generate Feedback"),
                   );
