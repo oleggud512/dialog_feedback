@@ -30,9 +30,7 @@ class TrainingInteractor {
       GetAiMessageParams(
         initialTaskText: messages.training.initialTaskText,
         messages: [
-          ...messages.messages.map(
-            (m) => MessageInput(messageText: m.messageText, role: m.role),
-          ),
+          ...messages.messages.map((m) => m.toInput()),
           MessageInput(messageText: params.messageText, role: MessageRole.user),
         ],
       ),

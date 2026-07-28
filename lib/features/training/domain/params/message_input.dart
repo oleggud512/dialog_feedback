@@ -1,3 +1,4 @@
+import '../entities/message.dart';
 import '../entities/message_role.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -15,4 +16,8 @@ sealed class MessageInput with _$MessageInput {
 
   factory MessageInput.fromJson(Map<String, dynamic> json) =>
       _$MessageInputFromJson(json);
+}
+
+extension MessageToInput on Message {
+  MessageInput toInput() => MessageInput(messageText: messageText, role: role);
 }
