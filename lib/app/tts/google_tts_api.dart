@@ -11,6 +11,7 @@ import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:uuid/uuid.dart';
 
 FutureOr<void> disposeGoogleTtsApi(TtsApi instance) {
   if (instance is GoogleTtsApi) {
@@ -32,10 +33,7 @@ class GoogleTtsApi with ActionExecutor implements TtsApi {
   String key() => _store.apiKey.get().trim();
 
   @override
-  Future<Result<File>> generate({
-    required String text,
-    required String fileName,
-  }) async {
+  Future<Result<File>> generate(String text) async {
     return execute(() async {
       final response = await dio.post(
         _endpoint,
@@ -56,6 +54,7 @@ class GoogleTtsApi with ActionExecutor implements TtsApi {
       if (data case {'audioContent': final content}) {
         final bytes = base64Decode(content);
         final dir = await getApplicationDocumentsDirectory();
+        final fileName = Uuid().v7();
         final savePath = join(dir.path, 'audios', '$fileName.mp3');
         final file = File(savePath);
         await file.writeAsBytes(bytes);
