@@ -1,6 +1,7 @@
 import 'package:dialog_feedback/app/errors/app_failure.dart';
 import 'package:dialog_feedback/app/errors/result.dart';
 import 'package:dialog_feedback/core/signal_registry/signal_registry.dart';
+import 'package:dialog_feedback/core/utils/int_id.dart';
 import 'package:dialog_feedback/features/training/domain/entities/message.dart';
 import 'package:dialog_feedback/features/training/domain/entities/message_role.dart';
 import 'package:dialog_feedback/features/training/domain/entities/messages_aggregate.dart';
@@ -76,7 +77,7 @@ class TrainingController extends SignalRegistry {
     if (currentAggr == null || loadingMessage.value != null) return;
 
     final tempMessage = Message(
-      id: -1,
+      id: intId(),
       messageText: messageText,
       role: MessageRole.user,
       createdAt: DateTime.now(),
