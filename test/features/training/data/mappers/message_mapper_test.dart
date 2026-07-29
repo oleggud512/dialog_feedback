@@ -15,6 +15,7 @@ void main() {
           role: MessageTableMessageRole.user,
           createdAt: createdAt,
           trainingId: 5,
+          audioPath: 'some/path',
         );
 
         final domain = model.toDomain();
@@ -24,6 +25,7 @@ void main() {
         expect(domain.role, MessageRole.user);
         expect(domain.createdAt, createdAt);
         expect(domain.trainingId, 5);
+        expect(domain.audioPath, 'some/path');
       },
     );
 
