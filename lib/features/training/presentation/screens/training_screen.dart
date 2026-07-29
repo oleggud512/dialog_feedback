@@ -61,12 +61,17 @@ class _TrainingScreenContent extends HookWidget {
     }, keys: [trainingController]);
 
     return Scaffold(
-      appBar: AppBar(title: Text("Training".hc)),
+      appBar: AppBar(
+        title: Text("Training".hc),
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainer.hc,
+      ),
       body: Column(
         crossAxisAlignment: .stretch,
         children: [
           Container(
-            color: Theme.of(context).cardColor.hc,
+            color: Theme.of(context).colorScheme.surfaceContainer.hc,
             padding: .all(16),
             child: SignalBuilder(
               builder: (context) {
@@ -146,7 +151,7 @@ class _TrainingScreenContent extends HookWidget {
             },
           ),
           Container(
-            color: Theme.of(context).cardColor.hc,
+            color: Theme.of(context).colorScheme.surfaceContainer.hc,
             padding: .fromLTRB(16, 12, 16, 16),
             child: SignalBuilder(
               builder: (context) {
@@ -173,6 +178,9 @@ class _TrainingScreenContent extends HookWidget {
                     Expanded(
                       child: TextField(
                         controller: inputCont,
+                        maxLines: null,
+                        minLines: null,
+                        expands: false,
                         onSubmitted: isMessageInProgress
                             ? null
                             : (_) {
