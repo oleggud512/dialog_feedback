@@ -31,7 +31,11 @@ class FeedbackController extends SignalRegistry {
 
     batch(() {
       loading.value = true;
+      aggregate.value = null;
+      error.value = null;
+      feedback.value = null;
       isFeedbackGenerating.value = false;
+      feedbackError.value = null;
     });
 
     final aggregateRes = await _trainingInteractor.getMessages(trainingId);
@@ -49,7 +53,7 @@ class FeedbackController extends SignalRegistry {
 
     if (feedbackRes case Success(:final value)) {
       batch(() {
-        loading.value == false;
+        loading.value = false;
         feedback.value = value;
       });
       return;
@@ -69,6 +73,7 @@ class FeedbackController extends SignalRegistry {
           break;
       }
       loading.value = false;
+      isFeedbackGenerating.value = false;
     });
   }
 }
