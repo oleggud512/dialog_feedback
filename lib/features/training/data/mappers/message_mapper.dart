@@ -9,6 +9,7 @@ extension MessageDbModelMapper on MessageDbModel {
     role: role.toDomain(),
     createdAt: createdAt,
     trainingId: trainingId,
+    audioPath: audioPath,
   );
 }
 

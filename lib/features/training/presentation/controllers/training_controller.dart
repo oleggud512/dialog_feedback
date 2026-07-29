@@ -82,6 +82,7 @@ class TrainingController extends SignalRegistry {
       role: MessageRole.user,
       createdAt: DateTime.now(),
       trainingId: currentAggr.training.id,
+      audioPath: "",
     );
 
     batch(() {

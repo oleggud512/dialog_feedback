@@ -11,6 +11,7 @@ sealed class Message with _$Message {
     required MessageRole role,
     required DateTime createdAt,
     required int trainingId,
+    required String audioPath,
   }) = _Message;
 
   const Message._();
@@ -22,6 +23,7 @@ sealed class CreateMessageParams with _$CreateMessageParams {
     required String messageText,
     required MessageRole role,
     required int trainingId,
+    required String audioPath,
   }) = _CreateMessageParams;
 
   const CreateMessageParams._();
