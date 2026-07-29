@@ -62,6 +62,7 @@ dependencies:
   genkit_google_genai: ^0.2.12
   schemantic: ^0.2.2
   flutter_markdown_plus: ^1.0.12
+  dio: ^5.11.0
 
 
 dev_dependencies:

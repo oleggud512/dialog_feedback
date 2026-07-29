@@ -9,3 +9,5 @@ class AlreadyExistsFailure extends AppFailure {}
 class DatabaseFailure extends AppFailure {}
 
 class GenerationFailure extends AppFailure {}
+
+class NetworkFailure extends AppFailure {}
