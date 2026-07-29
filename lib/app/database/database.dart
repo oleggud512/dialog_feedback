@@ -34,6 +34,7 @@ class MessageTable extends Table {
   late final role = textEnum<MessageTableMessageRole>()();
   late final createdAt = dateTime().withDefault(currentDateAndTime)();
   late final trainingId = integer().references(TrainingTable, #id)();
+  late final audioPath = text()();
 }
 
 @DataClassName("FeedbackDbModel")
@@ -52,7 +53,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   static QueryExecutor _openConnection() {
     return driftDatabase(
@@ -74,6 +75,9 @@ class AppDatabase extends _$AppDatabase {
       },
       from2To3: (m, schema) async {
         await m.createTable(schema.feedback);
+      },
+      from3To4: (m, schema) async {
+        await m.addColumn(schema.message, schema.message.audioPath);
       },
     ),
   );
