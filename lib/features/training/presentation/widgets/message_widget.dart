@@ -2,14 +2,20 @@ import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:dialog_feedback/core/extensions/dev.dart';
+import 'package:dialog_feedback/core/utils/logger.dart';
 import 'package:dialog_feedback/features/training/domain/entities/message.dart';
 import 'package:dialog_feedback/features/training/domain/entities/message_role.dart';
 import 'package:flutter/material.dart';
 
 class MessageWidget extends StatelessWidget {
-  const MessageWidget({super.key, required this.message});
+  const MessageWidget({
+    super.key,
+    required this.message,
+    required this.autoPlay,
+  });
 
   final Message message;
+  final bool autoPlay;
 
   @override
   Widget build(BuildContext context) {
@@ -42,13 +48,7 @@ class MessageWidget extends StatelessWidget {
                 ),
               ),
               if (message.audioPath.isNotEmpty)
-                _AudioButton(
-                  audioPath: message.audioPath,
-                  autoPlay: switch (message.role) {
-                    MessageRole.user => false,
-                    MessageRole.ai => true,
-                  },
-                ),
+                _AudioButton(audioPath: message.audioPath, autoPlay: autoPlay),
             ],
           ),
         ),
@@ -101,11 +101,13 @@ class _AudioButtonState extends State<_AudioButton> {
     if (widget.audioPath.isEmpty) return;
     try {
       _hasError = false;
-      await _player.setSourceDeviceFile(widget.audioPath);
-      if (widget.autoPlay && mounted) {
-        await _player.resume();
+      if (widget.autoPlay) {
+        await _player.play(DeviceFileSource(widget.audioPath));
+      } else {
+        await _player.setSourceDeviceFile(widget.audioPath);
       }
-    } catch (_) {
+    } catch (e) {
+      glog.e(e);
       if (mounted) {
         setState(() {
           _hasError = true;
@@ -133,18 +135,21 @@ class _AudioButtonState extends State<_AudioButton> {
         try {
           switch (_player.state) {
             case PlayerState.playing:
-              await _player.stop();
+              await _player.pause();
               await _player.seek(Duration.zero);
-            case PlayerState.completed:
-              await _player.seek(Duration.zero);
-              await _player.resume();
-            case PlayerState.stopped:
+              break;
             case PlayerState.paused:
               await _player.resume();
+              break;
+            case PlayerState.completed:
+            case PlayerState.stopped:
+              await _player.play(DeviceFileSource(widget.audioPath));
+              break;
             case PlayerState.disposed:
               break;
           }
-        } catch (_) {
+        } catch (e) {
+          glog.e(e);
           if (mounted) {
             setState(() {
               _hasError = true;

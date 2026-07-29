@@ -109,6 +109,7 @@ class _TrainingScreenContent extends HookWidget {
                     return MessageWidget(
                       key: ValueKey(message.id),
                       message: message,
+                      autoPlay: message.role == .ai && i == 0,
                     );
                   },
                 );
