@@ -30,16 +30,27 @@ class _SettingsScreenContent extends HookWidget {
       settingsController.apiKey,
     );
 
+    final ttsApiKeyCont = useSignalTextEditingController(
+      settingsController.ttsApiKey,
+    );
+
     return Scaffold(
       appBar: AppBar(title: Text("App Settings".hc)),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
+          spacing: 16,
+          crossAxisAlignment: .stretch,
           children: [
             TextField(
               controller: apiKeyCont,
               decoration: InputDecoration(helperText: "API Key".hc),
               onChanged: (value) => settingsController.setApiKey(value),
+            ),
+            TextField(
+              controller: ttsApiKeyCont,
+              decoration: InputDecoration(helperText: "TTS API Key".hc),
+              onChanged: (value) => settingsController.setTtsApiKey(value),
             ),
           ],
         ),

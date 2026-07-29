@@ -8,4 +8,5 @@ class SecureKeyValueStore extends KeyValueStore {
     : super(FlutterSecureStorageAdapter(), namespace: 'default');
 
   late final apiKey = stringEntity('apiKey', defaultValue: '');
+  late final ttsApiKey = stringEntity('ttsApiKey', defaultValue: '');
 }

@@ -30,7 +30,7 @@ class GoogleTtsApi with ActionExecutor implements TtsApi {
 
   final dio = Dio(BaseOptions(headers: {'Content-Type': 'application/json'}));
 
-  String key() => _store.apiKey.get().trim();
+  String key() => _store.ttsApiKey.get().trim();
 
   @override
   Future<Result<File>> generate(String text) async {
@@ -57,6 +57,7 @@ class GoogleTtsApi with ActionExecutor implements TtsApi {
         final fileName = Uuid().v7();
         final savePath = join(dir.path, 'audios', '$fileName.mp3');
         final file = File(savePath);
+        await file.parent.create(recursive: true);
         await file.writeAsBytes(bytes);
         return Success(file);
       }

@@ -10,8 +10,13 @@ class SettingsController extends SignalRegistry {
   SettingsController(this._store);
 
   late final apiKey = track(_store.apiKey.toSignal());
+  late final ttsApiKey = track(_store.ttsApiKey.toSignal());
 
   void setApiKey(String newApiKey) {
     apiKey.value = newApiKey;
+  }
+
+  void setTtsApiKey(String newApiKey) {
+    ttsApiKey.value = newApiKey;
   }
 }
