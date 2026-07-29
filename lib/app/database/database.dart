@@ -34,7 +34,7 @@ class MessageTable extends Table {
   late final role = textEnum<MessageTableMessageRole>()();
   late final createdAt = dateTime().withDefault(currentDateAndTime)();
   late final trainingId = integer().references(TrainingTable, #id)();
-  late final audioPath = text()();
+  late final audioPath = text().withDefault(Constant(""))();
 }
 
 @DataClassName("FeedbackDbModel")

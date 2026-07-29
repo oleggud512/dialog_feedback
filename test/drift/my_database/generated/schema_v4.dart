@@ -319,8 +319,9 @@ class Message extends Table with TableInfo<Message, MessageData> {
     aliasedName,
     false,
     type: DriftSqlType.string,
-    requiredDuringInsert: true,
-    $customConstraints: 'NOT NULL',
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT \'\'',
+    defaultValue: const CustomExpression('\'\''),
   );
   @override
   List<GeneratedColumn> get $columns => [
@@ -522,11 +523,10 @@ class MessageCompanion extends UpdateCompanion<MessageData> {
     required String role,
     this.createdAt = const Value.absent(),
     required int trainingId,
-    required String audioPath,
+    this.audioPath = const Value.absent(),
   }) : messageText = Value(messageText),
        role = Value(role),
-       trainingId = Value(trainingId),
-       audioPath = Value(audioPath);
+       trainingId = Value(trainingId);
   static Insertable<MessageData> custom({
     Expression<int>? id,
     Expression<String>? messageText,

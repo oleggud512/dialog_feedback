@@ -265,7 +265,8 @@ i1.GeneratedColumn<String> _column_9(String aliasedName) =>
       aliasedName,
       false,
       type: i1.DriftSqlType.string,
-      $customConstraints: 'NOT NULL',
+      $customConstraints: 'NOT NULL DEFAULT \'\'',
+      defaultValue: const i1.CustomExpression('\'\''),
     );
 i0.MigrationStepWithVersion migrationSteps({
   required Future<void> Function(i1.Migrator m, Schema2 schema) from1To2,

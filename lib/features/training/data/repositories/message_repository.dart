@@ -42,7 +42,7 @@ class MessageRepositoryImpl with ActionExecutor implements MessageRepository {
               messageText: params.messageText,
               role: params.role.toData(),
               trainingId: params.trainingId,
-              audioPath: params.audioPath,
+              audioPath: Value(params.audioPath),
             ),
           );
       return Success(row.toDomain());
@@ -92,7 +92,7 @@ class MessageRepositoryImpl with ActionExecutor implements MessageRepository {
                 messageText: userParams.messageText,
                 role: userParams.role.toData(),
                 trainingId: userParams.trainingId,
-                audioPath: userParams.audioPath,
+                audioPath: Value(userParams.audioPath),
               ),
             );
 
@@ -103,7 +103,7 @@ class MessageRepositoryImpl with ActionExecutor implements MessageRepository {
                 messageText: aiParams.messageText,
                 role: aiParams.role.toData(),
                 trainingId: aiParams.trainingId,
-                audioPath: aiParams.audioPath,
+                audioPath: Value(aiParams.audioPath),
               ),
             );
 

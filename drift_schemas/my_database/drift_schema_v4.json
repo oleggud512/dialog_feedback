@@ -163,7 +163,7 @@
             "moor_type": "string",
             "nullable": false,
             "customConstraints": null,
-            "default_dart": null,
+            "default_dart": "const CustomExpression('\\'\\'')",
             "default_client_dart": null,
             "dsl_features": []
           }
@@ -268,7 +268,7 @@
       "sql": [
         {
           "dialect": "sqlite",
-          "sql": "CREATE TABLE IF NOT EXISTS \"message\" (\"id\" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \"message_text\" TEXT NOT NULL, \"role\" TEXT NOT NULL, \"created_at\" TEXT NOT NULL DEFAULT (CURRENT_TIMESTAMP), \"training_id\" INTEGER NOT NULL REFERENCES training (id), \"audio_path\" TEXT NOT NULL);"
+          "sql": "CREATE TABLE IF NOT EXISTS \"message\" (\"id\" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \"message_text\" TEXT NOT NULL, \"role\" TEXT NOT NULL, \"created_at\" TEXT NOT NULL DEFAULT (CURRENT_TIMESTAMP), \"training_id\" INTEGER NOT NULL REFERENCES training (id), \"audio_path\" TEXT NOT NULL DEFAULT '');"
         }
       ]
     },
