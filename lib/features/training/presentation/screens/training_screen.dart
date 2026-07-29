@@ -41,27 +41,22 @@ class _TrainingScreenContent extends HookWidget {
       final trimmed = inputCont.text.trim();
       if (trimmed.isNotEmpty) {
         trainingController.addMessage(trimmed);
+        inputCont.clear();
       }
     }
 
     useSignalEffect(() {
-      final mes = trainingController.loadingMessage;
+      final curMes = trainingController.loadingMessage.value;
+      final prevMes = trainingController.loadingMessage.previousValue;
+      final curErr = trainingController.loadingMessageError.value;
+      final prevErr = trainingController.loadingMessageError.previousValue;
 
-      if (mes.previousValue == null && mes.value != null) {
-        inputCont.clear();
-      }
-    }, keys: [trainingController]);
-
-    useSignalEffect(() {
-      final mes = trainingController.loadingMessage;
-      final err = trainingController.loadingMessageError;
-
-      if (mes.previousValue != null &&
-          mes.value == null &&
-          err.previousValue != null &&
-          err.value == null &&
+      if (prevMes != null &&
+          curMes == null &&
+          prevErr != null &&
+          curErr == null &&
           inputCont.text.isEmpty) {
-        inputCont.text = mes.previousValue!.messageText;
+        inputCont.text = prevMes.messageText;
       }
     }, keys: [trainingController]);
 
