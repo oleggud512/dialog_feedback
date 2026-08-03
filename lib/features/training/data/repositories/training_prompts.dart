@@ -55,7 +55,11 @@ Structure your feedback exactly like this using Markdown:
 
 ## Exam Tips
 
-[Give 1-2 actionable tips on how they could sound more natural, improve their conversational flow, or score higher in the actual exam.]''';
+[Give 1-2 actionable tips on how they could sound more natural, improve their conversational flow, or score higher in the actual exam.]
+
+## Formal Feedback
+
+[Passed or not, real evaluation]''';
 
 String getFeedbackUserPrompt({
   required String initialTaskText,

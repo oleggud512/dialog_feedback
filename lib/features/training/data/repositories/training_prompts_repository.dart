@@ -2,14 +2,14 @@ import 'package:dialog_feedback/app/errors/action_executor.dart';
 import 'package:dialog_feedback/app/errors/app_failure.dart';
 import 'package:dialog_feedback/app/errors/result.dart';
 import 'package:dialog_feedback/app/key_value_storage/secure_key_value_store.dart';
-import '../../domain/params/get_ai_message.dart';
-import '../../domain/repositories/training_prompts_repository.dart';
-import '../../domain/results/feedback_result.dart';
-import '../../domain/results/message_result.dart';
+import 'package:dialog_feedback/features/training/data/repositories/training_prompts.dart';
+import 'package:dialog_feedback/features/training/domain/params/get_ai_message.dart';
+import 'package:dialog_feedback/features/training/domain/repositories/training_prompts_repository.dart';
+import 'package:dialog_feedback/features/training/domain/results/feedback_result.dart';
+import 'package:dialog_feedback/features/training/domain/results/message_result.dart';
 import 'package:genkit/genkit.dart';
 import 'package:genkit_google_genai/genkit_google_genai.dart';
 import 'package:injectable/injectable.dart';
-import 'training_prompts.dart';
 
 @Singleton(as: TrainingPromptsRepository)
 class TrainingPromptsRepositoryImpl
