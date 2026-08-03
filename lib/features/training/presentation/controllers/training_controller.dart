@@ -121,6 +121,46 @@ class TrainingController extends SignalRegistry {
     }
   }
 
+  void letAiStart() async {
+    final currentAggr = _aggregate.value;
+    if (currentAggr == null || loadingMessage.value != null) return;
+
+    final tempMessage = Message(
+      id: intId(),
+      messageText: "",
+      role: MessageRole.ai,
+      createdAt: DateTime.now(),
+      trainingId: currentAggr.training.id,
+      audioPath: "",
+    );
+
+    batch(() {
+      loadingMessage.value = tempMessage;
+      loadingMessageError.value = null;
+    });
+
+    final messageRes = await _interactor.generateInitialMessage(
+      currentAggr.training.id,
+    );
+
+    switch (messageRes) {
+      case Success(value: final message):
+        batch(() {
+          _aggregate.value = currentAggr.copyWith(
+            messages: [
+              ...currentAggr.messages,
+              message,
+            ],
+          );
+          loadingMessage.value = null;
+        });
+        break;
+      case Failure(:final failure):
+        loadingMessageError.value = failure;
+        break;
+    }
+  }
+
   void resetError() {
     batch(() {
       loadingMessage.value = null;

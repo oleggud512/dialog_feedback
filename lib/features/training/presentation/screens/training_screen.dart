@@ -100,6 +100,23 @@ class _TrainingScreenContent extends HookWidget {
               builder: (context) {
                 final messages = trainingController.messages.value;
 
+                if (messages.isEmpty) {
+                  return Padding(
+                    padding: .all(16),
+                    child: Column(
+                      crossAxisAlignment: .stretch,
+                      children: [
+                        FilledButton(
+                          onPressed: () {
+                            trainingController.letAiStart();
+                          },
+                          child: Text("Let AI start".hc),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+
                 return ListView.builder(
                   reverse: true,
                   itemCount: messages.length,

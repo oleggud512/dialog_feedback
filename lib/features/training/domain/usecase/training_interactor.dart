@@ -1,3 +1,4 @@
+import 'package:dialog_feedback/app/errors/app_failure.dart';
 import 'package:dialog_feedback/app/errors/result.dart';
 import 'package:dialog_feedback/app/tts/tts_api.dart';
 import 'package:dialog_feedback/features/training/domain/entities/answer_pair.dart';
@@ -65,6 +66,48 @@ class TrainingInteractor {
         audioPath: audioFilePath,
       ),
       isCompleted: generatedMessage.isCompleted,
+    );
+  }
+
+  Future<Result<Message>> generateInitialMessage(int trainingId) async {
+    final messagesRes = await _messageRepo.getMessages(trainingId);
+
+    if (messagesRes case Failure(:final failure)) {
+      return Failure(failure);
+    }
+
+    final messages = messagesRes.valueOrNull!;
+
+    if (messages.messages.isNotEmpty) {
+      return Failure(AlreadyExistsFailure());
+    }
+
+    final generatedMessageRes = await _promptsRepo.getAiMessage(
+      GetAiMessageParams(
+        initialTaskText: messages.training.initialTaskText,
+        messages: const [],
+      ),
+    );
+
+    if (generatedMessageRes case Failure(:final failure)) {
+      return Failure(failure);
+    }
+
+    final generatedMessage = generatedMessageRes.valueOrNull!;
+
+    final audioFileRes = await _tts.generate(generatedMessage.messageText);
+    final audioFilePath = switch (audioFileRes) {
+      Success(:final value) => value.path,
+      _ => "",
+    };
+
+    return _messageRepo.createMessage(
+      CreateMessageParams(
+        messageText: generatedMessage.messageText,
+        role: MessageRole.ai,
+        trainingId: trainingId,
+        audioPath: audioFilePath,
+      ),
     );
   }
 
