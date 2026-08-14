@@ -4,6 +4,7 @@ import 'package:dialog_feedback/app/errors/app_failure.dart';
 import 'package:dialog_feedback/app/errors/result.dart';
 import 'package:dialog_feedback/shared/data/mappers/training_mapper.dart';
 import 'package:dialog_feedback/shared/domain/entities/training.dart';
+import 'package:dialog_feedback/shared/domain/entities/training_history_item.dart';
 import 'package:dialog_feedback/shared/domain/repositories/training_repository.dart';
 import 'package:drift/drift.dart';
 import 'package:injectable/injectable.dart';
@@ -45,14 +46,28 @@ class TrainingRepositoryImpl with ActionExecutor implements TrainingRepository {
   }
 
   @override
-  Future<Result<List<Training>>> getTrainings() async {
+  Future<Result<List<TrainingHistoryItem>>> getTrainings() async {
     return execute(() async {
-      final query = db.select(db.trainingTable)
-        ..orderBy([(tbl) => OrderingTerm.desc(tbl.createdAt)]);
+      final query = db.select(db.trainingTable).join([
+        leftOuterJoin(
+          db.feedbackTable,
+          db.feedbackTable.trainingId.equalsExp(db.trainingTable.id),
+        ),
+      ])..orderBy([OrderingTerm.desc(db.trainingTable.createdAt)]);
 
-      final res = await query.get();
+      final rows = await query.get();
 
-      return Success(res.map((model) => model.toDomain()).toList());
+      final historyItems = rows.map((row) {
+        final trainingModel = row.readTable(db.trainingTable);
+        final feedbackModel = row.readTableOrNull(db.feedbackTable);
+
+        return TrainingHistoryItem(
+          training: trainingModel.toDomain(),
+          hasFeedback: feedbackModel != null,
+        );
+      }).toList();
+
+      return Success(historyItems);
     }, createDefault: (_) => Failure(DatabaseFailure()));
   }
 }

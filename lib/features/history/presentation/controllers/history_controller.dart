@@ -1,6 +1,6 @@
 import 'package:dialog_feedback/app/errors/result.dart';
 import 'package:dialog_feedback/core/signal_registry/signal_registry.dart';
-import 'package:dialog_feedback/shared/domain/entities/training.dart';
+import 'package:dialog_feedback/shared/domain/entities/training_history_item.dart';
 import 'package:dialog_feedback/shared/domain/repositories/training_repository.dart';
 import 'package:injectable/injectable.dart';
 import 'package:signals/signals_flutter.dart';
@@ -12,7 +12,8 @@ class HistoryController extends SignalRegistry {
   HistoryController(this._repo);
 
   late final isLoading = track(trackedSignal(false));
-  late final trainings = track(trackedSignal<Result<List<Training>>?>(null));
+  late final trainings =
+      track(trackedSignal<Result<List<TrainingHistoryItem>>?>(null));
 
   Future<void> loadTrainings() async {
     isLoading.value = true;

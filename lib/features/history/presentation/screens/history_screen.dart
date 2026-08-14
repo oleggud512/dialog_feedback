@@ -4,7 +4,7 @@ import 'package:dialog_feedback/app/router/app_uri.dart';
 import 'package:dialog_feedback/core/extensions/dev.dart';
 import 'package:dialog_feedback/core/signal_registry/signal_registry.dart';
 import 'package:dialog_feedback/di.dart';
-import 'package:dialog_feedback/shared/domain/entities/training.dart';
+import 'package:dialog_feedback/shared/domain/entities/training_history_item.dart';
 import 'package:dialog_feedback/shared/presentation/widgets/app_failure_widget.dart';
 import '../controllers/history_controller.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +57,7 @@ class _HistoryScreenContent extends StatelessWidget {
 class _HistoryList extends StatelessWidget {
   const _HistoryList({required this.trainings});
 
-  final List<Training> trainings;
+  final List<TrainingHistoryItem> trainings;
 
   @override
   Widget build(BuildContext context) {
@@ -66,11 +66,11 @@ class _HistoryList extends StatelessWidget {
       itemCount: trainings.length,
       separatorBuilder: (_, _) => SizedBox(height: 16),
       itemBuilder: (context, i) {
-        final training = trainings[i];
+        final item = trainings[i];
 
         return _TrainingListWidget(
-          key: ValueKey(training.id),
-          training: training,
+          key: ValueKey(item.training.id),
+          item: item,
         );
       },
     );
@@ -78,9 +78,9 @@ class _HistoryList extends StatelessWidget {
 }
 
 class _TrainingListWidget extends StatelessWidget {
-  const _TrainingListWidget({super.key, required this.training});
+  const _TrainingListWidget({super.key, required this.item});
 
-  final Training training;
+  final TrainingHistoryItem item;
 
   @override
   Widget build(BuildContext context) {
@@ -89,8 +89,12 @@ class _TrainingListWidget extends StatelessWidget {
       clipBehavior: .hardEdge,
       child: InkWell(
         onTap: () {
-          // TODO: Based on the training completion status, choose to open the Feedback screen
-          context.push(AppUri.root.training.id(training.id.toString()).path);
+          final id = item.training.id.toString();
+          if (item.hasFeedback) {
+            context.push(AppUri.root.feedback.id(id).path);
+          } else {
+            context.push(AppUri.root.training.id(id).path);
+          }
         },
         child: Padding(
           padding: .all(16),
@@ -99,8 +103,11 @@ class _TrainingListWidget extends StatelessWidget {
             mainAxisSize: .min,
             spacing: 8,
             children: [
-              Text(training.initialTaskText),
-              Align(alignment: .centerEnd, child: Text(training.id.toString())),
+              Text(item.training.initialTaskText),
+              Align(
+                alignment: .centerEnd,
+                child: Text(item.training.id.toString()),
+              ),
             ],
           ),
         ),

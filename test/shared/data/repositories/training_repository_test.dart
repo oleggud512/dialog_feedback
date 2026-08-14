@@ -3,6 +3,7 @@ import 'package:dialog_feedback/app/errors/app_failure.dart';
 import 'package:dialog_feedback/app/errors/result.dart';
 import 'package:dialog_feedback/shared/data/repositories/training_repository.dart';
 import 'package:dialog_feedback/shared/domain/entities/training.dart';
+import 'package:dialog_feedback/shared/domain/entities/training_history_item.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -70,18 +71,18 @@ void main() {
   test("getTrainings returns an empty list when there is no data", () async {
     final result = await repo.getTrainings();
 
-    expect(result, isA<Success<List<Training>>>());
+    expect(result, isA<Success<List<TrainingHistoryItem>>>());
 
-    final list = (result as Success<List<Training>>).value;
+    final list = (result as Success<List<TrainingHistoryItem>>).value;
     expect(list, isEmpty);
   });
 
   test(
-    "getTrainings returns mapped records ordered descending by createdAt",
+    "getTrainings returns mapped records ordered descending by createdAt with hasFeedback flag",
     () async {
       final now = DateTime.now();
 
-      await db
+      final id1 = await db
           .into(db.trainingTable)
           .insert(
             TrainingTableCompanion.insert(
@@ -90,7 +91,7 @@ void main() {
             ),
           );
 
-      await db
+      final id2 = await db
           .into(db.trainingTable)
           .insert(
             TrainingTableCompanion.insert(
@@ -99,15 +100,29 @@ void main() {
             ),
           );
 
+      await db
+          .into(db.feedbackTable)
+          .insert(
+            FeedbackTableCompanion.insert(
+              feedbackText: "Great job!",
+              trainingId: id1,
+            ),
+          );
+
       final result = await repo.getTrainings();
 
-      expect(result, isA<Success<List<Training>>>());
-      final list = (result as Success<List<Training>>).value;
+      expect(result, isA<Success<List<TrainingHistoryItem>>>());
+      final list = (result as Success<List<TrainingHistoryItem>>).value;
 
       expect(list.length, 2);
 
-      expect(list[0].initialTaskText, "New Task");
-      expect(list[1].initialTaskText, "Old Task");
+      expect(list[0].training.id, id2);
+      expect(list[0].training.initialTaskText, "New Task");
+      expect(list[0].hasFeedback, false);
+
+      expect(list[1].training.id, id1);
+      expect(list[1].training.initialTaskText, "Old Task");
+      expect(list[1].hasFeedback, true);
     },
   );
 }
