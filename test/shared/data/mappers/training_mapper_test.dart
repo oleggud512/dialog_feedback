@@ -1,4 +1,4 @@
-import 'package:dialog_feedback/app/database/database.dart';
+import 'package:dialog_feedback/core/database/database.dart';
 import 'package:dialog_feedback/shared/data/mappers/training_mapper.dart';
 import 'package:flutter_test/flutter_test.dart';
 

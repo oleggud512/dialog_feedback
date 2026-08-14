@@ -1,4 +1,4 @@
-import 'package:dialog_feedback/app/errors/result.dart';
+import 'package:dialog_feedback/core/errors/result.dart';
 import '../params/get_ai_message.dart';
 import '../results/feedback_result.dart';
 import '../results/message_result.dart';

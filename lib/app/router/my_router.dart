@@ -4,7 +4,7 @@ import 'package:dialog_feedback/features/training/presentation/screens/feedback_
 import 'package:dialog_feedback/features/training/presentation/screens/setup_screen.dart';
 import 'package:dialog_feedback/features/training/presentation/screens/training_screen.dart';
 import 'package:go_router/go_router.dart';
-import 'app_uri.dart';
+import 'package:dialog_feedback/core/navigation/app_uri.dart';
 
 class MyRouter {
   const MyRouter._();

@@ -1,4 +1,4 @@
-import 'package:dialog_feedback/app/database/database.dart';
+import 'package:dialog_feedback/core/database/database.dart';
 import 'package:dialog_feedback/features/training/data/mappers/message_mapper.dart';
 import 'package:dialog_feedback/features/training/domain/entities/message_role.dart';
 import 'package:flutter_test/flutter_test.dart';

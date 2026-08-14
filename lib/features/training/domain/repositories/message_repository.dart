@@ -1,4 +1,4 @@
-import 'package:dialog_feedback/app/errors/result.dart';
+import 'package:dialog_feedback/core/errors/result.dart';
 import '../entities/answer_pair.dart';
 import '../entities/message.dart';
 import '../entities/messages_aggregate.dart';

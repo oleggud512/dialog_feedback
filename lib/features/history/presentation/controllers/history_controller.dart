@@ -1,4 +1,4 @@
-import 'package:dialog_feedback/app/errors/result.dart';
+import 'package:dialog_feedback/core/errors/result.dart';
 import 'package:dialog_feedback/core/signal_registry/signal_registry.dart';
 import 'package:dialog_feedback/shared/domain/entities/training_history_item.dart';
 import 'package:dialog_feedback/shared/domain/repositories/training_repository.dart';

@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:dialog_feedback/app/database/database.dart';
-import 'package:dialog_feedback/app/key_value_storage/secure_key_value_store.dart';
+import 'package:dialog_feedback/core/database/database.dart';
+import 'package:dialog_feedback/core/key_value_storage/secure_key_value_store.dart';
 import 'package:injectable/injectable.dart';
 
 FutureOr<void> disposeAppDatabase(AppDatabase instance) => instance.close();

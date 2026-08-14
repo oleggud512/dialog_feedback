@@ -1,6 +1,6 @@
-import 'package:dialog_feedback/app/errors/app_failure.dart';
-import 'package:dialog_feedback/app/errors/result.dart';
-import 'package:dialog_feedback/app/tts/tts_api.dart';
+import 'package:dialog_feedback/core/errors/app_failure.dart';
+import 'package:dialog_feedback/core/errors/result.dart';
+import 'package:dialog_feedback/core/tts/tts_api.dart';
 import 'package:dialog_feedback/features/training/domain/entities/answer_pair.dart';
 import 'package:dialog_feedback/features/training/domain/entities/message.dart';
 import 'package:dialog_feedback/features/training/domain/entities/message_role.dart';

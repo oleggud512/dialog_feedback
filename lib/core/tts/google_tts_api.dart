@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:dialog_feedback/app/errors/action_executor.dart';
-import 'package:dialog_feedback/app/errors/app_failure.dart';
-import 'package:dialog_feedback/app/errors/result.dart';
-import 'package:dialog_feedback/app/key_value_storage/secure_key_value_store.dart';
-import 'package:dialog_feedback/app/tts/tts_api.dart';
+import 'package:dialog_feedback/core/errors/action_executor.dart';
+import 'package:dialog_feedback/core/errors/app_failure.dart';
+import 'package:dialog_feedback/core/errors/result.dart';
+import 'package:dialog_feedback/core/key_value_storage/secure_key_value_store.dart';
+import 'package:dialog_feedback/core/tts/tts_api.dart';
 import 'package:dialog_feedback/core/utils/logger.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';

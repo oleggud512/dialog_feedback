@@ -1,4 +1,4 @@
-import 'package:dialog_feedback/app/database/database.dart';
+import 'package:dialog_feedback/core/database/database.dart';
 import 'package:dialog_feedback/features/training/domain/entities/training_feedback.dart';
 
 extension FeedbackDbModelMapper on FeedbackDbModel {

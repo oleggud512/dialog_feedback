@@ -1,7 +1,7 @@
-import 'package:dialog_feedback/app/database/database.dart';
-import 'package:dialog_feedback/app/errors/action_executor.dart';
-import 'package:dialog_feedback/app/errors/app_failure.dart';
-import 'package:dialog_feedback/app/errors/result.dart';
+import 'package:dialog_feedback/core/database/database.dart';
+import 'package:dialog_feedback/core/errors/action_executor.dart';
+import 'package:dialog_feedback/core/errors/app_failure.dart';
+import 'package:dialog_feedback/core/errors/result.dart';
 import 'package:dialog_feedback/shared/data/mappers/training_mapper.dart';
 import 'package:dialog_feedback/shared/domain/entities/training.dart';
 import 'package:dialog_feedback/shared/domain/entities/training_history_item.dart';
