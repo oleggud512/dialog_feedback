@@ -36,7 +36,11 @@ class _FeedbackScreenContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final feedbackController = context.watch<FeedbackController>();
     return Scaffold(
-      appBar: AppBar(title: Text("Feedback")),
+      appBar: AppBar(
+        title: Text("Feedback"),
+        scrolledUnderElevation: 0,
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainer.hc,
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: .stretch,
