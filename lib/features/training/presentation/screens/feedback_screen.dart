@@ -123,7 +123,10 @@ class _FeedbackScreenContent extends StatelessWidget {
                   }
 
                   if (feedback != null) {
-                    return MarkdownBody(data: feedback.feedbackText);
+                    return MarkdownBody(
+                      data: feedback.feedbackText,
+                      selectable: true,
+                    );
                   }
 
                   return AppFailureWidget(failure: UnknownFailure());
@@ -151,7 +154,7 @@ class _MessagesAggregateWidget extends StatelessWidget {
         Container(
           color: Theme.of(context).colorScheme.surfaceContainer.hc,
           padding: .all(16),
-          child: Text(aggregate.training.initialTaskText),
+          child: SelectableText(aggregate.training.initialTaskText),
         ),
         ...aggregate.messages.map(
           (message) => MessageWidget(

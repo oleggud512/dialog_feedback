@@ -91,7 +91,7 @@ class _TrainingScreenContent extends HookWidget {
                   return AppFailureWidget(failure: UnknownFailure());
                 }
 
-                return Text(taskText);
+                return SelectableText(taskText);
               },
             ),
           ),

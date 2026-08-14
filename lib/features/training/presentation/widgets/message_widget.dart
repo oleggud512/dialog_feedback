@@ -40,7 +40,7 @@ class MessageWidget extends StatelessWidget {
               MessageRole.ai => .end,
             },
             children: [
-              Text(message.messageText),
+              SelectableText(message.messageText),
               Text(
                 message.createdAt.toIso8601String(),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
