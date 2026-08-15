@@ -57,7 +57,7 @@ class TrainingInteractor {
         messageText: params.messageText,
         role: MessageRole.user,
         trainingId: params.trainingId,
-        audioPath: "",
+        audioPath: params.audioPath,
       ),
       aiParams: CreateMessageParams(
         messageText: generatedMessage.messageText,

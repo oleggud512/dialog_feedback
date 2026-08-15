@@ -1,18 +1,15 @@
 import 'package:dialog_feedback/core/errors/app_failure.dart';
-import 'package:dialog_feedback/core/navigation/app_uri.dart';
 import 'package:dialog_feedback/core/extensions/dev.dart';
-import 'package:dialog_feedback/core/extensions/list.dart';
+import 'package:dialog_feedback/core/navigation/app_uri.dart';
 import 'package:dialog_feedback/core/signal_registry/signal_registry.dart';
 import 'package:dialog_feedback/di.dart';
 import 'package:dialog_feedback/features/training/presentation/controllers/training_controller.dart';
-import 'package:dialog_feedback/features/training/presentation/widgets/message_widget.dart';
 import 'package:dialog_feedback/shared/presentation/extensions/app_failure.dart';
 import 'package:dialog_feedback/shared/presentation/widgets/app_failure_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:signals/signals_hooks.dart';
+import 'package:signals/signals_flutter.dart';
 
 class TrainingScreen extends StatelessWidget {
   const TrainingScreen({super.key, required this.trainingId});
@@ -23,42 +20,17 @@ class TrainingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SignalRegistryProvider(
       create: (_) => sl<TrainingController>()..loadTraining(trainingId),
-      child: _TrainingScreenContent(),
+      child: const _TrainingScreenContent(),
     );
   }
 }
 
-class _TrainingScreenContent extends HookWidget {
+class _TrainingScreenContent extends StatelessWidget {
   const _TrainingScreenContent();
 
   @override
   Widget build(BuildContext context) {
     final trainingController = context.watch<TrainingController>();
-
-    final inputCont = useTextEditingController();
-
-    void addMessage() {
-      final trimmed = inputCont.text.trim();
-      if (trimmed.isNotEmpty) {
-        trainingController.addMessage(trimmed);
-        inputCont.clear();
-      }
-    }
-
-    useSignalEffect(() {
-      final curMes = trainingController.loadingMessage.value;
-      final prevMes = trainingController.loadingMessage.previousValue;
-      final curErr = trainingController.loadingMessageError.value;
-      final prevErr = trainingController.loadingMessageError.previousValue;
-
-      if (prevMes != null &&
-          curMes == null &&
-          prevErr != null &&
-          curErr == null &&
-          inputCont.text.isEmpty) {
-        inputCont.text = prevMes.messageText;
-      }
-    }, keys: [trainingController]);
 
     return Scaffold(
       appBar: AppBar(
@@ -70,6 +42,7 @@ class _TrainingScreenContent extends HookWidget {
       body: Column(
         crossAxisAlignment: .stretch,
         children: [
+          // Top Initial Task Header
           Container(
             color: Theme.of(context).colorScheme.surfaceContainer.hc,
             padding: .all(16),
@@ -95,79 +68,282 @@ class _TrainingScreenContent extends HookWidget {
               },
             ),
           ),
+
+          // Main Center Area (Replacing Chat List)
           Expanded(
             child: SignalBuilder(
               builder: (context) {
+                final loading = trainingController.loading.value;
+                if (loading) {
+                  return const SizedBox.shrink();
+                }
+
                 final messages = trainingController.messages.value;
+                final isCompleted =
+                    trainingController.training.value?.isChatCompleted == true;
 
                 if (messages.isEmpty) {
-                  return Padding(
-                    padding: .all(16),
-                    child: Column(
-                      crossAxisAlignment: .stretch,
-                      children: [
-                        FilledButton(
-                          onPressed: () {
-                            trainingController.letAiStart();
-                          },
-                          child: Text("Let AI start".hc),
-                        ),
-                      ],
+                  return Center(
+                    child: Padding(
+                      padding: .all(24.0),
+                      child: Column(
+                        mainAxisAlignment: .center,
+                        children: [
+                          Icon(
+                            Icons.record_voice_over,
+                            size: 64,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            "Ready to begin training".hc,
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          const SizedBox(height: 24),
+                          FilledButton.icon(
+                            onPressed: () {
+                              trainingController.letAiStart();
+                            },
+                            icon: const Icon(Icons.play_arrow),
+                            label: Text("Let AI start".hc),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 }
 
-                return ListView.builder(
-                  reverse: true,
-                  itemCount: messages.length,
-                  itemBuilder: (context, i) {
-                    final message = messages.reversedAt(i);
+                final isRecording = trainingController.isRecording.value;
+                final isPlayingAiAudio =
+                    trainingController.isPlayingAiAudio.value;
+                final isTranscribing = trainingController.isTranscribing.value;
+                final isMessageLoading =
+                    trainingController.isMessageLoading.value;
+                final showLastAiResponse =
+                    trainingController.showLastAiResponse.value;
+                final lastAiMessage = trainingController.lastAiMessage.value;
 
-                    return MessageWidget(
-                      key: ValueKey(message.id),
-                      message: message,
-                      autoPlay: message.role == .ai && i == 0,
-                    );
-                  },
+                return SingleChildScrollView(
+                  padding: .all(20),
+                  child: Column(
+                    crossAxisAlignment: .stretch,
+                    children: [
+                      // Voice State Status Box
+                      Card.outlined(
+                        child: Padding(
+                          padding: .all(20),
+                          child: Column(
+                            children: [
+                              if (isPlayingAiAudio) ...[
+                                Icon(
+                                  Icons.volume_up_rounded,
+                                  size: 48,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                                const SizedBox(height: 12),
+                                Text(
+                                  "AI is speaking...".hc,
+                                  style: Theme.of(context).textTheme.titleSmall,
+                                ),
+                              ] else if (isTranscribing) ...[
+                                const CircularProgressIndicator(),
+                                const SizedBox(height: 12),
+                                Text(
+                                  "Transcribing your voice...".hc,
+                                  style: Theme.of(context).textTheme.titleSmall,
+                                ),
+                              ] else if (isMessageLoading) ...[
+                                const CircularProgressIndicator(),
+                                const SizedBox(height: 12),
+                                Text(
+                                  "AI is thinking...".hc,
+                                  style: Theme.of(context).textTheme.titleSmall,
+                                ),
+                              ] else if (isRecording) ...[
+                                const Icon(
+                                  Icons.mic,
+                                  size: 48,
+                                  color: Colors.redAccent,
+                                ),
+                                const SizedBox(height: 12),
+                                Text(
+                                  "Listening... Speak now".hc,
+                                  style: Theme.of(context).textTheme.titleSmall
+                                      ?.copyWith(
+                                        color: Colors.redAccent,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                              ] else if (isCompleted) ...[
+                                const Icon(
+                                  Icons.check_circle_outline,
+                                  size: 48,
+                                  color: Colors.green,
+                                ),
+                                const SizedBox(height: 12),
+                                Text(
+                                  "Conversation completed".hc,
+                                  style: Theme.of(context).textTheme.titleSmall,
+                                ),
+                              ] else ...[
+                                const Icon(
+                                  Icons.mic_none,
+                                  size: 48,
+                                  color: Colors.grey,
+                                ),
+                                const SizedBox(height: 12),
+                                Text(
+                                  "Waiting...".hc,
+                                  style: Theme.of(context).textTheme.titleSmall,
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+
+                      // Toggleable Last AI Response Section
+                      if (lastAiMessage != null) ...[
+                        Row(
+                          mainAxisAlignment: .spaceBetween,
+                          children: [
+                            Text(
+                              "Last AI Response".hc,
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                            OutlinedButton.icon(
+                              onPressed: () {
+                                trainingController.toggleShowLastAiResponse();
+                              },
+                              icon: Icon(
+                                showLastAiResponse
+                                    ? Icons.visibility_off_outlined
+                                    : Icons.visibility_outlined,
+                                size: 18,
+                              ),
+                              label: Text(
+                                showLastAiResponse ? "Hide".hc : "Show".hc,
+                              ),
+                            ),
+                          ],
+                        ),
+                        if (showLastAiResponse) ...[
+                          const SizedBox(height: 8),
+                          Card.filled(
+                            child: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Column(
+                                crossAxisAlignment: .start,
+                                children: [
+                                  SelectableText(
+                                    lastAiMessage.messageText,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.bodyMedium,
+                                  ),
+                                  if (lastAiMessage.audioPath.isNotEmpty) ...[
+                                    const SizedBox(height: 12),
+                                    Align(
+                                      alignment: .centerRight,
+                                      child: TextButton.icon(
+                                        onPressed: isPlayingAiAudio
+                                            ? null
+                                            : () {
+                                                trainingController
+                                                    .replayLastAiAudio();
+                                              },
+                                        icon: const Icon(
+                                          Icons.replay,
+                                          size: 18,
+                                        ),
+                                        label: Text("Replay Audio".hc),
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ],
+                  ),
                 );
               },
             ),
           ),
+
+          // Error Display Area
           SignalBuilder(
             builder: (context) {
-              final isMessageLoading =
-                  trainingController.isMessageLoading.value;
               final messageError = trainingController.loadingMessageError.value;
+              if (messageError == null) return const SizedBox.shrink();
 
-              return Column(
-                crossAxisAlignment: .stretch,
-                mainAxisSize: .min,
-                children: [
-                  if (messageError != null)
-                    Row(
-                      mainAxisAlignment: .spaceBetween,
-                      crossAxisAlignment: .end,
-                      spacing: 4,
-                      children: [
-                        Text(
-                          messageError.localize(),
-                          style: TextStyle(color: Colors.red.hc),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            trainingController.resetError();
-                          },
-                          child: Text("Reset".hc),
-                        ),
-                      ],
+              final hasPendingRetry =
+                  trainingController.hasPendingRetry.value;
+
+              return Container(
+                color: Theme.of(context).colorScheme.errorContainer,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.error_outline,
+                      color: Theme.of(context).colorScheme.onErrorContainer,
                     ),
-                  isMessageLoading
-                      ? LinearProgressIndicator(minHeight: 4)
-                      : SizedBox(height: 4),
-                ],
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        messageError.localize(),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onErrorContainer,
+                        ),
+                      ),
+                    ),
+                    if (hasPendingRetry) ...[
+                      TextButton(
+                        onPressed: () => trainingController.retry(),
+                        child: Text(
+                          "Retry".hc,
+                          style: TextStyle(
+                            color:
+                                Theme.of(context).colorScheme.onErrorContainer,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () => trainingController.resetError(),
+                        child: Text(
+                          "Discard".hc,
+                          style: TextStyle(
+                            color:
+                                Theme.of(context).colorScheme.onErrorContainer,
+                          ),
+                        ),
+                      ),
+                    ] else ...[
+                      TextButton(
+                        onPressed: () => trainingController.resetError(),
+                        child: Text(
+                          "Dismiss".hc,
+                          style: TextStyle(
+                            color:
+                                Theme.of(context).colorScheme.onErrorContainer,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
               );
             },
           ),
+
+          // Bottom Action Bar
           Container(
             color: Theme.of(context).colorScheme.surfaceContainer.hc,
             padding: .fromLTRB(16, 12, 16, 16),
@@ -183,42 +359,23 @@ class _TrainingScreenContent extends HookWidget {
                       if (id == null) return;
                       context.push(AppUri.root.feedback.id(id.toString()).path);
                     },
-                    child: Text("Generate Feedback"),
+                    child: Text("Generate Feedback".hc),
                   );
                 }
 
-                final isMessageInProgress =
-                    trainingController.loadingMessage.value != null;
+                final messages = trainingController.messages.value;
+                if (messages.isEmpty) {
+                  return const SizedBox.shrink();
+                }
 
-                return Row(
-                  spacing: 8,
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: inputCont,
-                        maxLines: null,
-                        minLines: null,
-                        expands: false,
-                        onSubmitted: isMessageInProgress
-                            ? null
-                            : (_) {
-                                addMessage();
-                              },
-                        enabled: !isMessageInProgress,
-                        decoration: InputDecoration(
-                          hintText: "Enter a message...".hc,
-                        ),
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: isMessageInProgress
-                          ? null
-                          : () {
-                              addMessage();
-                            },
-                      icon: Icon(Icons.send),
-                    ),
-                  ],
+                final isSendEnabled = trainingController.isSendEnabled.value;
+
+                return FilledButton.icon(
+                  onPressed: isSendEnabled
+                      ? () => trainingController.sendVoiceInput()
+                      : null,
+                  icon: const Icon(Icons.send),
+                  label: Text("Send Response".hc),
                 );
               },
             ),
