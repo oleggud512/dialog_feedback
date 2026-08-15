@@ -9,4 +9,5 @@ class SecureKeyValueStore extends KeyValueStore {
 
   late final apiKey = stringEntity('apiKey', defaultValue: '');
   late final ttsApiKey = stringEntity('ttsApiKey', defaultValue: '');
+  late final openaiApiKey = stringEntity('openaiApiKey', defaultValue: '');
 }

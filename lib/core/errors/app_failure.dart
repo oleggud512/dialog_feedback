@@ -11,3 +11,11 @@ class DatabaseFailure extends AppFailure {}
 class GenerationFailure extends AppFailure {}
 
 class NetworkFailure extends AppFailure {}
+
+class PermissionDeniedFailure extends AppFailure {}
+
+class RecordingFailure extends AppFailure {}
+
+class NoActiveRecordingFailure extends RecordingFailure {}
+
+class RecordingNotFoundFailure extends RecordingFailure {}
