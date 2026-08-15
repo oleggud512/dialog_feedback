@@ -11,6 +11,7 @@ class SettingsController extends SignalRegistry {
 
   late final apiKey = track(_store.apiKey.toSignal());
   late final ttsApiKey = track(_store.ttsApiKey.toSignal());
+  late final openaiApiKey = track(_store.openaiApiKey.toSignal());
 
   void setApiKey(String newApiKey) {
     apiKey.value = newApiKey;
@@ -18,5 +19,9 @@ class SettingsController extends SignalRegistry {
 
   void setTtsApiKey(String newApiKey) {
     ttsApiKey.value = newApiKey;
+  }
+
+  void setOpenaiApiKey(String newApiKey) {
+    openaiApiKey.value = newApiKey;
   }
 }

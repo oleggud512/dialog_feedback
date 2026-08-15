@@ -34,6 +34,10 @@ class _SettingsScreenContent extends HookWidget {
       settingsController.ttsApiKey,
     );
 
+    final openaiApiKeyCont = useSignalTextEditingController(
+      settingsController.openaiApiKey,
+    );
+
     return Scaffold(
       appBar: AppBar(title: Text("App Settings".hc)),
       body: SingleChildScrollView(
@@ -51,6 +55,11 @@ class _SettingsScreenContent extends HookWidget {
               controller: ttsApiKeyCont,
               decoration: InputDecoration(helperText: "TTS API Key".hc),
               onChanged: (value) => settingsController.setTtsApiKey(value),
+            ),
+            TextField(
+              controller: openaiApiKeyCont,
+              decoration: InputDecoration(helperText: "OpenAI API Key".hc),
+              onChanged: (value) => settingsController.setOpenaiApiKey(value),
             ),
           ],
         ),
